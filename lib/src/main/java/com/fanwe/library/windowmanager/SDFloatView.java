@@ -127,6 +127,10 @@ public class SDFloatView extends FrameLayout
      */
     public void setWindowParams(WindowManager.LayoutParams windowParams)
     {
+        if (windowParams == null)
+        {
+            return;
+        }
         mWindowParams = windowParams;
     }
 

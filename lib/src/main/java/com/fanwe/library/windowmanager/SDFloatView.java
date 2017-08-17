@@ -106,6 +106,11 @@ public class SDFloatView extends FrameLayout
         return mContentView;
     }
 
+    /**
+     * 返回WindowManager的LayoutParams
+     *
+     * @return
+     */
     public WindowManager.LayoutParams getWindowParams()
     {
         if (mWindowParams == null)
@@ -113,6 +118,16 @@ public class SDFloatView extends FrameLayout
             mWindowParams = SDWindowManager.newLayoutParams();
         }
         return mWindowParams;
+    }
+
+    /**
+     * 设置WindowManager的LayoutParams
+     *
+     * @param windowParams
+     */
+    public void setWindowParams(WindowManager.LayoutParams windowParams)
+    {
+        mWindowParams = windowParams;
     }
 
     /**

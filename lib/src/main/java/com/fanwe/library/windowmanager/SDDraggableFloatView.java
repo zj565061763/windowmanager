@@ -16,6 +16,13 @@ public class SDDraggableFloatView extends SDFloatView
     private SDTouchHelper mTouchHelper = new SDTouchHelper();
 
     @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev)
+    {
+        mTouchHelper.processTouchEvent(ev);
+        return true;
+    }
+
+    @Override
     public boolean onTouchEvent(MotionEvent event)
     {
         mTouchHelper.processTouchEvent(event);

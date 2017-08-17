@@ -121,8 +121,25 @@ public class SDWindowManager
         }
 
         getWindowManager().addView(view, params);
+
+        view.removeOnAttachStateChangeListener(mInternalOnAttachStateChangeListener);
+        view.addOnAttachStateChangeListener(mInternalOnAttachStateChangeListener);
         mMapView.put(view, 0);
     }
+
+    private View.OnAttachStateChangeListener mInternalOnAttachStateChangeListener = new View.OnAttachStateChangeListener()
+    {
+        @Override
+        public void onViewAttachedToWindow(View v)
+        {
+        }
+
+        @Override
+        public void onViewDetachedFromWindow(View v)
+        {
+            mMapView.remove(v);
+        }
+    };
 
     /**
      * 更新view的参数
@@ -155,7 +172,6 @@ public class SDWindowManager
         init(view);
 
         getWindowManager().removeView(view);
-        mMapView.remove(view);
     }
 
     /**
@@ -172,7 +188,6 @@ public class SDWindowManager
         init(view);
 
         getWindowManager().removeViewImmediate(view);
-        mMapView.remove(view);
     }
 
     /**

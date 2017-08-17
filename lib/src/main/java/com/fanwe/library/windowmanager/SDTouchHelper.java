@@ -282,15 +282,15 @@ class SDTouchHelper
     /**
      * 根据条件返回合法的x方向增量
      *
-     * @param view    要处理的view
-     * @param minLeft view的最小left
-     * @param maxLeft view的最大left
+     * @param left    当前left
+     * @param minLeft 最小left
+     * @param maxLeft 最大left
      * @param dx      x方向将要叠加的增量
      * @return
      */
-    public int getLegalDeltaX(View view, int minLeft, int maxLeft, int dx)
+    public int getLegalDeltaX(int left, int minLeft, int maxLeft, int dx)
     {
-        int future = view.getLeft() + dx;
+        int future = left + dx;
         if (isMoveLeftFrom(EVENT_LAST))
         {
             //如果向左拖动
@@ -314,15 +314,15 @@ class SDTouchHelper
     /**
      * 根据条件返回合法的y方向增量
      *
-     * @param view   要处理的view
-     * @param minTop view的最小top
-     * @param maxTop view的最大top
+     * @param top    当前top
+     * @param minTop 最小top
+     * @param maxTop 最大top
      * @param dy     y方向将要叠加的增量
      * @return
      */
-    public int getLegalDeltaY(View view, int minTop, int maxTop, int dy)
+    public int getLegalDeltaY(int top, int minTop, int maxTop, int dy)
     {
-        int future = view.getTop() + dy;
+        int future = top + dy;
         if (isMoveUpFrom(EVENT_LAST))
         {
             //如果向上拖动

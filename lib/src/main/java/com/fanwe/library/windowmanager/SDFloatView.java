@@ -5,14 +5,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 import java.lang.ref.WeakReference;
 
 /**
- * Created by Administrator on 2017/8/17.
+ * 悬浮view
  */
-
 public class SDFloatView extends FrameLayout
 {
     public SDFloatView(Context context)
@@ -25,6 +25,8 @@ public class SDFloatView extends FrameLayout
     private WeakReference<ViewGroup> mOriginalParent;
     private ViewGroup.LayoutParams mOriginalParams;
     private int mOriginalIndex = -1;
+
+    private WindowManager.LayoutParams mWindowParams;
 
     /**
      * 设置要悬浮的view
@@ -93,6 +95,37 @@ public class SDFloatView extends FrameLayout
     public View getContentView()
     {
         return mContentView;
+    }
+
+    public WindowManager.LayoutParams getWindowParams()
+    {
+        if (mWindowParams == null)
+        {
+            mWindowParams = SDWindowManager.newLayoutParams();
+        }
+        return mWindowParams;
+    }
+
+    /**
+     * 是否添加到Window
+     *
+     * @param attach
+     */
+    public void attachToWindow(boolean attach)
+    {
+        if (attach)
+        {
+            if (getParent() == null)
+            {
+                SDWindowManager.getInstance().addView(this, getWindowParams());
+            }
+        } else
+        {
+            if (getParent() != null)
+            {
+                SDWindowManager.getInstance().removeView(this);
+            }
+        }
     }
 
     private void saveViewInfo(View view)

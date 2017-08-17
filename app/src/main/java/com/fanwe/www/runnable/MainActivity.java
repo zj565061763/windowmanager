@@ -25,4 +25,9 @@ public class MainActivity extends AppCompatActivity
         mFloatView.setContentView(findViewById(R.id.btn));
         mFloatView.addToWindow(true);
     }
+
+    public void onClickRestore(View view)
+    {
+        mFloatView.restoreContentView();
+    }
 }

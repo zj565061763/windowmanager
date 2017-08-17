@@ -13,6 +13,13 @@
         android:text="添加到Window"/>
 
     <Button
+        android:id="@+id/btn_restore"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onClickRestore"
+        android:text="还原到原布局"/>
+
+    <Button
         android:id="@+id/btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

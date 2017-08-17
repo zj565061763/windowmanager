@@ -89,6 +89,7 @@ public class SDFloatView extends FrameLayout
         ViewGroup parent = getOriginalParent();
         if (parent != null && mContentView != null)
         {
+            addToWindow(false);
             removeView(mContentView);
             parent.addView(mContentView, mOriginalIndex, mOriginalParams);
             saveViewInfo(null);

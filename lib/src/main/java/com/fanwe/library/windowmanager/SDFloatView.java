@@ -27,6 +27,7 @@ public class SDFloatView extends FrameLayout
     private int mOriginalIndex = -1;
 
     private WindowManager.LayoutParams mWindowParams;
+    private boolean mIsAddedToWindow;
 
     /**
      * 设置要悬浮的view
@@ -35,13 +36,15 @@ public class SDFloatView extends FrameLayout
      */
     public void setContentView(View view)
     {
-        removeAllViews();
-        saveViewInfo(view);
-        if (view == null)
+        if (getContentView() != view)
         {
-            return;
+            removeAllViews();
+            saveViewInfo(view);
+            if (view != null)
+            {
+                addView(view);
+            }
         }
-        addView(view);
     }
 
     /**
@@ -52,13 +55,15 @@ public class SDFloatView extends FrameLayout
      */
     public void setContentView(View view, ViewGroup.LayoutParams params)
     {
-        removeAllViews();
-        saveViewInfo(view);
-        if (view == null)
+        if (getContentView() != view)
         {
-            return;
+            removeAllViews();
+            saveViewInfo(view);
+            if (view != null)
+            {
+                addView(view, params);
+            }
         }
-        addView(view, params);
     }
 
     /**
@@ -68,9 +73,12 @@ public class SDFloatView extends FrameLayout
      */
     public void setContentView(int layoutId)
     {
-        removeAllViews();
-        saveViewInfo(null);
-        LayoutInflater.from(getContext()).inflate(layoutId, this, true);
+        View view = null;
+        if (layoutId != 0)
+        {
+            view = LayoutInflater.from(getContext()).inflate(layoutId, this, false);
+        }
+        setContentView(view);
     }
 
     /**
@@ -111,13 +119,14 @@ public class SDFloatView extends FrameLayout
      *
      * @param attach
      */
-    public void attachToWindow(boolean attach)
+    public void addToWindow(boolean attach)
     {
         if (attach)
         {
             if (getParent() == null)
             {
                 SDWindowManager.getInstance().addView(this, getWindowParams());
+                mIsAddedToWindow = true;
             }
         } else
         {
@@ -126,6 +135,18 @@ public class SDFloatView extends FrameLayout
                 SDWindowManager.getInstance().removeView(this);
             }
         }
+    }
+
+    public boolean isAddedToWindow()
+    {
+        return mIsAddedToWindow;
+    }
+
+    @Override
+    protected void onDetachedFromWindow()
+    {
+        super.onDetachedFromWindow();
+        mIsAddedToWindow = false;
     }
 
     private void saveViewInfo(View view)

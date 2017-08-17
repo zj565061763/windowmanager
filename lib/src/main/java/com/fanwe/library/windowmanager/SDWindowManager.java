@@ -68,7 +68,7 @@ public class SDWindowManager
         init(context);
     }
 
-    private void checkInit()
+    private void checkContext()
     {
         if (mContext == null)
         {
@@ -78,7 +78,7 @@ public class SDWindowManager
 
     private WindowManager getWindowManager()
     {
-        checkInit();
+        checkContext();
         WindowManager windowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
         return windowManager;
     }

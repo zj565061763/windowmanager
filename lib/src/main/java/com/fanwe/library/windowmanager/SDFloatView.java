@@ -72,7 +72,7 @@ public class SDFloatView extends FrameLayout
     }
 
     /**
-     * 还原view到原parent
+     * 还原悬浮view到原parent
      */
     public void restoreContentView()
     {
@@ -83,6 +83,16 @@ public class SDFloatView extends FrameLayout
             parent.addView(mContentView, mOriginalIndex, mOriginalParams);
             saveViewInfo(null);
         }
+    }
+
+    /**
+     * 返回悬浮的内容view
+     *
+     * @return
+     */
+    public View getContentView()
+    {
+        return mContentView;
     }
 
     private void saveViewInfo(View view)

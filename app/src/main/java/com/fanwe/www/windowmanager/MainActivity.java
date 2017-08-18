@@ -6,6 +6,8 @@ import android.view.View;
 
 import com.fanwe.library.windowmanager.SDFloatHelper;
 
+import ezy.assist.compat.SettingsCompat;
+
 public class MainActivity extends AppCompatActivity
 {
 
@@ -22,7 +24,13 @@ public class MainActivity extends AppCompatActivity
 
     public void onClickAddToWindow(View view)
     {
-        mFloatHelper.addToWindow(true); //true-添加到Window
+        if (SettingsCompat.canDrawOverlays(this))
+        {
+            mFloatHelper.addToWindow(true); //true-添加到Window
+        } else
+        {
+            SettingsCompat.manageDrawOverlays(this);
+        }
     }
 
     public void onClickRemoveFromWindow(View view)

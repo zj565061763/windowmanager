@@ -24,8 +24,6 @@ public class SDFloatHelper
     private WindowManager.LayoutParams mWindowParams;
     private boolean mIsAddedToWindow;
 
-    private SDTouchHelper mTouchHelper = new SDTouchHelper();
-
     /**
      * 设置要悬浮的view
      *
@@ -186,6 +184,9 @@ public class SDFloatHelper
         }
     };
 
+    private int mLastX;
+    private int mLastY;
+
     /**
      * 处理触摸事件
      *
@@ -203,34 +204,51 @@ public class SDFloatHelper
             return;
         }
 
-        mTouchHelper.processTouchEvent(event);
-        if (event.getAction() == MotionEvent.ACTION_MOVE)
+        switch (event.getAction())
         {
-            int dx = (int) mTouchHelper.getDeltaXFrom(SDTouchHelper.EVENT_LAST);
-            int dy = (int) mTouchHelper.getDeltaYFrom(SDTouchHelper.EVENT_LAST);
+            case MotionEvent.ACTION_DOWN:
+                mLastX = (int) event.getRawX();
+                mLastY = (int) event.getRawY();
+                break;
+            case MotionEvent.ACTION_MOVE:
+                final int screenWidth = mContext.getResources().getDisplayMetrics().widthPixels;
+                final int screenHeight = mContext.getResources().getDisplayMetrics().heightPixels;
+                final int maxX = screenWidth - view.getWidth();
+                final int maxY = screenHeight - view.getHeight();
 
-            final int screenWidth = mContext.getResources().getDisplayMetrics().widthPixels;
-            final int screenHeight = mContext.getResources().getDisplayMetrics().heightPixels;
+                final int moveX = (int) event.getRawX();
+                final int moveY = (int) event.getRawY();
 
-            dx = mTouchHelper.getLegalDeltaX(getWindowParams().x, 0, screenWidth - view.getWidth(), dx);
-            dy = mTouchHelper.getLegalDeltaY(getWindowParams().y, 0, screenHeight - view.getHeight(), dy);
+                final int dx = moveX - mLastX;
+                final int dy = moveY - mLastY;
 
-            boolean needUpdate = false;
-            if (dx != 0)
-            {
-                getWindowParams().x += dx;
-                needUpdate = true;
-            }
-            if (dy != 0)
-            {
-                getWindowParams().y += dy;
-                needUpdate = true;
-            }
+                mLastX = moveX;
+                mLastY = moveY;
 
-            if (needUpdate)
-            {
+                int x = getWindowParams().x + dx;
+                int y = getWindowParams().y + dy;
+
+                if (x < 0)
+                {
+                    x = 0;
+                } else if (x > maxX)
+                {
+                    x = maxX;
+                }
+
+                if (y < 0)
+                {
+                    y = 0;
+                } else if (y > maxY)
+                {
+                    y = maxY;
+                }
+
+                getWindowParams().x = x;
+                getWindowParams().y = y;
                 SDWindowManager.getInstance().updateViewLayout(view, getWindowParams());
-            }
+
+                break;
         }
     }
 

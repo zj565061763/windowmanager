@@ -1,13 +1,10 @@
 package com.fanwe.library.windowmanager;
 
-import android.content.Context;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.view.WindowManager;
-
-import java.lang.ref.WeakReference;
 
 /**
  * 悬浮view帮助类
@@ -15,11 +12,7 @@ import java.lang.ref.WeakReference;
 public class SDFloatHelper
 {
     private View mContentView;
-    private Context mContext;
-
-    private WeakReference<ViewGroup> mOriginalParent;
-    private ViewGroup.LayoutParams mOriginalParams;
-    private int mOriginalIndex = -1;
+    private SDViewHelper mViewHelper = new SDViewHelper();
 
     private WindowManager.LayoutParams mWindowParams;
 
@@ -35,9 +28,25 @@ public class SDFloatHelper
      */
     public void setContentView(View view)
     {
-        if (getContentView() != view)
+        if (mContentView != view)
         {
-            saveViewInfo(view);
+            if (mContentView != null)
+            {
+                mContentView.setOnTouchListener(null);
+            }
+            mContentView = view;
+
+            mViewHelper.save(view);
+            if (mViewHelper.getParams() != null)
+            {
+                getWindowParams().width = mViewHelper.getParams().width;
+                getWindowParams().height = mViewHelper.getParams().height;
+            }
+
+            if (view != null)
+            {
+                view.setOnTouchListener(mInternalOnTouchListener);
+            }
         }
     }
 
@@ -46,23 +55,13 @@ public class SDFloatHelper
      */
     public void restoreContentView()
     {
-        if (mContentView == null)
-        {
-            return;
-        }
-        final ViewGroup originalParent = getOriginalParent();
-        if (originalParent == null)
-        {
-            return;
-        }
-        if (mContentView.getParent() == originalParent)
+        if (!mViewHelper.canRestore(mContentView))
         {
             return;
         }
 
-        removeViewFromParent(mContentView);
         addToWindow(false);
-        originalParent.addView(mContentView, mOriginalIndex, mOriginalParams);
+        mViewHelper.restore(mContentView);
     }
 
     /**
@@ -179,44 +178,6 @@ public class SDFloatHelper
         return SDWindowManager.getInstance().containsView(mContentView);
     }
 
-    private void saveViewInfo(View view)
-    {
-        mOriginalParent = null;
-        mOriginalParams = null;
-        mOriginalIndex = -1;
-        if (mContentView != null)
-        {
-            mContentView.setOnTouchListener(null);
-        }
-
-        mContentView = view;
-        if (view != null)
-        {
-            if (mContext == null)
-            {
-                mContext = view.getContext().getApplicationContext();
-            }
-
-            final ViewParent viewParent = view.getParent();
-            if (viewParent instanceof ViewGroup)
-            {
-                final ViewGroup viewGroup = (ViewGroup) viewParent;
-
-                setOriginalParent(viewGroup);
-                mOriginalParams = view.getLayoutParams();
-                mOriginalIndex = viewGroup.indexOfChild(view);
-
-                if (mOriginalParams != null)
-                {
-                    getWindowParams().width = mOriginalParams.width;
-                    getWindowParams().height = mOriginalParams.height;
-                }
-            }
-
-            view.setOnTouchListener(mInternalOnTouchListener);
-        }
-    }
-
     private View.OnTouchListener mInternalOnTouchListener = new View.OnTouchListener()
     {
         @Override
@@ -258,8 +219,8 @@ public class SDFloatHelper
                 mLastY = (int) event.getRawY();
                 break;
             case MotionEvent.ACTION_MOVE:
-                final int screenWidth = mContext.getResources().getDisplayMetrics().widthPixels;
-                final int screenHeight = mContext.getResources().getDisplayMetrics().heightPixels;
+                final int screenWidth = mViewHelper.getContext().getResources().getDisplayMetrics().widthPixels;
+                final int screenHeight = mViewHelper.getContext().getResources().getDisplayMetrics().heightPixels;
                 final int maxX = screenWidth - view.getWidth();
                 final int maxY = screenHeight - view.getHeight();
 
@@ -327,25 +288,5 @@ public class SDFloatHelper
                 }
                 break;
         }
-    }
-
-    private void setOriginalParent(ViewGroup viewGroup)
-    {
-        if (viewGroup != null)
-        {
-            mOriginalParent = new WeakReference<>(viewGroup);
-        } else
-        {
-            mOriginalParent = null;
-        }
-    }
-
-    private ViewGroup getOriginalParent()
-    {
-        if (mOriginalParent != null)
-        {
-            return mOriginalParent.get();
-        }
-        return null;
     }
 }

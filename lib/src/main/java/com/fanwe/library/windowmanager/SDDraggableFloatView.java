@@ -37,32 +37,34 @@ public class SDDraggableFloatView extends SDFloatView
 
     private boolean canDrag()
     {
+        boolean result = false;
+
         if (mTouchHelper.isMoveLeftFrom(SDTouchHelper.EVENT_DOWN))
         {
             if (!getContentView().canScrollHorizontally(1))
             {
-                return true;
+                result = true;
             }
         } else if (mTouchHelper.isMoveRightFrom(SDTouchHelper.EVENT_DOWN))
         {
             if (!getContentView().canScrollHorizontally(-1))
             {
-                return true;
+                result = true;
             }
         } else if (mTouchHelper.isMoveUpFrom(SDTouchHelper.EVENT_DOWN))
         {
             if (!getContentView().canScrollVertically(1))
             {
-                return true;
+                result = true;
             }
         } else if (mTouchHelper.isMoveDownFrom(SDTouchHelper.EVENT_DOWN))
         {
             if (!getContentView().canScrollVertically(-1))
             {
-                return true;
+                result = true;
             }
         }
-        return false;
+        return result;
     }
 
     private boolean dontProcessTouchEvent()

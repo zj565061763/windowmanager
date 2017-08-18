@@ -219,11 +219,39 @@ public class SDFloatHelper
                 final int moveX = (int) event.getRawX();
                 final int moveY = (int) event.getRawY();
 
-                final int dx = moveX - mLastX;
-                final int dy = moveY - mLastY;
+                int dx = moveX - mLastX;
+                int dy = moveY - mLastY;
 
                 mLastX = moveX;
                 mLastY = moveY;
+
+                if (dx > 0)
+                {
+                    if (view.canScrollHorizontally(-1))
+                    {
+                        dx = 0;
+                    }
+                } else if (dx < 0)
+                {
+                    if (view.canScrollHorizontally(1))
+                    {
+                        dx = 0;
+                    }
+                }
+
+                if (dy > 0)
+                {
+                    if (view.canScrollVertically(-1))
+                    {
+                        dy = 0;
+                    }
+                } else if (dy < 0)
+                {
+                    if (view.canScrollVertically(1))
+                    {
+                        dy = 0;
+                    }
+                }
 
                 int x = getWindowParams().x + dx;
                 int y = getWindowParams().y + dy;

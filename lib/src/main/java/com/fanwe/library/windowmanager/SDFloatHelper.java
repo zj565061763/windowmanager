@@ -41,12 +41,23 @@ public class SDFloatHelper
      */
     public void restoreContentView()
     {
-        final ViewGroup originalParent = getOriginalParent();
-        if (mContentView != null && originalParent != null && originalParent != mContentView.getParent())
+        if (mContentView == null)
         {
-            addToWindow(false);
-            originalParent.addView(mContentView, mOriginalIndex, mOriginalParams);
+            return;
         }
+        final ViewGroup originalParent = getOriginalParent();
+        if (originalParent == null)
+        {
+            return;
+        }
+        if (mContentView.getParent() == originalParent)
+        {
+            return;
+        }
+
+        removeViewFromParent(mContentView);
+        addToWindow(false);
+        originalParent.addView(mContentView, mOriginalIndex, mOriginalParams);
     }
 
     /**
@@ -135,7 +146,7 @@ public class SDFloatHelper
             return;
         }
         final ViewParent viewParent = view.getParent();
-        if (viewParent == null || !(viewParent instanceof ViewGroup))
+        if (!(viewParent instanceof ViewGroup))
         {
             return;
         }

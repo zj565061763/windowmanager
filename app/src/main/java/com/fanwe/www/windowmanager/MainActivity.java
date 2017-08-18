@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Toast;
 
 import com.fanwe.library.windowmanager.SDDraggableFloatView;
 
@@ -18,6 +19,14 @@ public class MainActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        findViewById(R.id.btn_float).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Toast.makeText(getApplication(), "click", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         mFloatView = new SDDraggableFloatView(this);
         mFloatView.setContentView(findViewById(R.id.btn_float)); //设置要悬浮的view

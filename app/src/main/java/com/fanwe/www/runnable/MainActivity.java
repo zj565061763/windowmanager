@@ -5,12 +5,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
 
-import com.fanwe.library.windowmanager.SDDraggableFloatView;
+import com.fanwe.library.windowmanager.SDFloatHelper;
 
 public class MainActivity extends AppCompatActivity
 {
 
-    private SDDraggableFloatView mFloatView;
+    private SDFloatHelper mFloatHelper = new SDFloatHelper();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -26,17 +26,16 @@ public class MainActivity extends AppCompatActivity
                 Toast.makeText(getApplication(), "click", 0).show();
             }
         });
-        mFloatView = new SDDraggableFloatView(this);
     }
 
     public void onClickAddToWindow(View view)
     {
-        mFloatView.setContentView(findViewById(R.id.btn));
-        mFloatView.addToWindow(true);
+        mFloatHelper.setContentView(findViewById(R.id.btn));
+        mFloatHelper.addToWindow(true);
     }
 
     public void onClickRestore(View view)
     {
-        mFloatView.restoreContentView();
+        mFloatHelper.restoreContentView();
     }
 }

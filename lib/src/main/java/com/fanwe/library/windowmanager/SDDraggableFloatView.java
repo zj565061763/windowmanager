@@ -13,19 +13,12 @@ public class SDDraggableFloatView extends SDFloatView
     public SDDraggableFloatView(Context context)
     {
         super(context);
-        init();
     }
-
-    private SDTouchHelper mTouchHelper = new SDTouchHelper();
 
     /**
      * 是否可以拖动
      */
     private boolean mIsDraggable = true;
-
-    private void init()
-    {
-    }
 
     /**
      * 设置是否可以拖动，默认可以拖动
@@ -35,6 +28,13 @@ public class SDDraggableFloatView extends SDFloatView
     public void setDraggable(boolean draggable)
     {
         mIsDraggable = draggable;
+    }
+
+    private SDTouchHelper mTouchHelper = new SDTouchHelper();
+
+    private boolean dontProcessTouchEvent()
+    {
+        return (!mIsDraggable || getContentView() == null || !isAddedToWindow());
     }
 
     private boolean canDrag()
@@ -70,11 +70,6 @@ public class SDDraggableFloatView extends SDFloatView
                 break;
         }
         return result;
-    }
-
-    private boolean dontProcessTouchEvent()
-    {
-        return (!mIsDraggable || getContentView() == null || !isAddedToWindow());
     }
 
     @Override

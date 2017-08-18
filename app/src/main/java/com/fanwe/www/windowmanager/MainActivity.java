@@ -1,4 +1,4 @@
-package com.fanwe.www.runnable;
+package com.fanwe.www.windowmanager;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

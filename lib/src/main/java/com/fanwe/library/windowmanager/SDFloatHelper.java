@@ -41,11 +41,11 @@ public class SDFloatHelper
      */
     public void restoreContentView()
     {
-        ViewGroup parent = getOriginalParent();
-        if (mContentView != null && parent != null)
+        final ViewGroup originalParent = getOriginalParent();
+        if (mContentView != null && originalParent != null && originalParent != mContentView.getParent())
         {
             addToWindow(false);
-            parent.addView(mContentView, mOriginalIndex, mOriginalParams);
+            originalParent.addView(mContentView, mOriginalIndex, mOriginalParams);
             saveViewInfo(null);
         }
     }

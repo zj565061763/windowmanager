@@ -107,7 +107,15 @@ public class SDFloatHelper
             if (!mIsAddedToWindow)
             {
                 removeViewFromParent(view);
-                SDWindowManager.getInstance().addView(view, getWindowParams());
+
+                final WindowManager.LayoutParams params = getWindowParams();
+                if (mOriginalParams != null)
+                {
+                    params.width = mOriginalParams.width;
+                    params.height = mOriginalParams.height;
+                }
+
+                SDWindowManager.getInstance().addView(view, params);
                 mIsAddedToWindow = true;
             }
         } else

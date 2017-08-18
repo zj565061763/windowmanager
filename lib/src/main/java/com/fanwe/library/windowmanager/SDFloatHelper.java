@@ -149,7 +149,7 @@ public class SDFloatHelper
      */
     public boolean isAddedToWindow()
     {
-        return SDWindowManager.getInstance().hasView(mContentView);
+        return SDWindowManager.getInstance().containsView(mContentView);
     }
 
     private void saveViewInfo(View view)

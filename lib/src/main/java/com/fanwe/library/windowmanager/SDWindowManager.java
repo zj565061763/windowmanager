@@ -110,11 +110,15 @@ public class SDWindowManager
      */
     public void addView(View view, ViewGroup.LayoutParams params)
     {
+        init(view);
         if (view == null)
         {
             return;
         }
-        init(view);
+        if (containsView(view))
+        {
+            return;
+        }
         if (params == null)
         {
             params = newLayoutParams();
@@ -149,13 +153,16 @@ public class SDWindowManager
      */
     public void updateViewLayout(View view, ViewGroup.LayoutParams params)
     {
+        init(view);
         if (view == null || params == null)
         {
             return;
         }
-        init(view);
 
-        getWindowManager().updateViewLayout(view, params);
+        if (containsView(view))
+        {
+            getWindowManager().updateViewLayout(view, params);
+        }
     }
 
     /**
@@ -165,13 +172,16 @@ public class SDWindowManager
      */
     public void removeView(View view)
     {
+        init(view);
         if (view == null)
         {
             return;
         }
-        init(view);
 
-        getWindowManager().removeView(view);
+        if (containsView(view))
+        {
+            getWindowManager().removeView(view);
+        }
     }
 
     /**
@@ -181,13 +191,16 @@ public class SDWindowManager
      */
     public void removeViewImmediate(View view)
     {
+        init(view);
         if (view == null)
         {
             return;
         }
-        init(view);
 
-        getWindowManager().removeViewImmediate(view);
+        if (containsView(view))
+        {
+            getWindowManager().removeViewImmediate(view);
+        }
     }
 
     /**
@@ -262,7 +275,7 @@ public class SDWindowManager
      * @param clazz
      * @return
      */
-    public boolean hasView(Class clazz)
+    public boolean containsView(Class clazz)
     {
         return getFirstView(clazz) != null;
     }
@@ -273,7 +286,7 @@ public class SDWindowManager
      * @param view
      * @return
      */
-    public boolean hasView(View view)
+    public boolean containsView(View view)
     {
         if (view == null || mMapView.isEmpty())
         {

@@ -244,10 +244,12 @@ public class SDFloatHelper
                     y = maxY;
                 }
 
-                getWindowParams().x = x;
-                getWindowParams().y = y;
-                SDWindowManager.getInstance().updateViewLayout(view, getWindowParams());
-
+                if (getWindowParams().x != x || getWindowParams().y != y)
+                {
+                    getWindowParams().x = x;
+                    getWindowParams().y = y;
+                    SDWindowManager.getInstance().updateViewLayout(view, getWindowParams());
+                }
                 break;
         }
     }

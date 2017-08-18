@@ -12,7 +12,7 @@ public class SDFloatView extends FrameLayout
 {
     public SDFloatView(Context context)
     {
-        super(context);
+        super(context.getApplicationContext());
     }
 
     private View mContentView;

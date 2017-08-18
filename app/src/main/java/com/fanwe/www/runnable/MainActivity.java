@@ -26,11 +26,12 @@ public class MainActivity extends AppCompatActivity
                 Toast.makeText(getApplication(), "click", 0).show();
             }
         });
+
+        mFloatHelper.setContentView(findViewById(R.id.btn));
     }
 
     public void onClickAddToWindow(View view)
     {
-        mFloatHelper.setContentView(findViewById(R.id.btn));
         mFloatHelper.addToWindow(true);
     }
 

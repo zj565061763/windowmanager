@@ -33,14 +33,6 @@
         android:onClick="onClickNewActivity"
         android:text="打开新Activity"/>
 
-    <Button
-        android:id="@+id/btn_float"
-        android:layout_width="wrap_content"
-        android:layout_height="100dp"
-        android:layout_margin="10dp"
-        android:padding="10dp"
-        android:text="悬浮View"/>
-
     <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
@@ -58,6 +50,28 @@
         android:layout_width="200dp"
         android:layout_height="200dp">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btn_click"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:text="button"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:background="@android:color/holo_red_dark"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="500dp"
+                android:background="@android:color/holo_blue_dark"/>
+
+        </LinearLayout>
     </ScrollView>
 
 </LinearLayout>

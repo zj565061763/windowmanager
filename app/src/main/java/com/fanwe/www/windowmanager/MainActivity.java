@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        findViewById(R.id.btn_float).setOnClickListener(new View.OnClickListener()
+        findViewById(R.id.btn_click).setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity
         });
 
         mFloatView = new SDDraggableFloatView(this);
-        mFloatView.setContentView(findViewById(R.id.btn_float)); //设置要悬浮的view
+        mFloatView.setContentView(findViewById(R.id.scrollView)); //设置要悬浮的view
 
         mNewActivityFloatView = new SDDraggableFloatView(this);
         mNewActivityFloatView.setContentView(findViewById(R.id.btn_new_activity_float)); //设置要悬浮的view

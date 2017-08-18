@@ -1,5 +1,7 @@
 package com.fanwe.library.windowmanager;
 
+import android.content.Context;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -13,6 +15,7 @@ import java.lang.ref.WeakReference;
 public class SDFloatHelper
 {
     private View mContentView;
+    private Context mContext;
 
     private WeakReference<ViewGroup> mOriginalParent;
     private ViewGroup.LayoutParams mOriginalParams;
@@ -20,6 +23,8 @@ public class SDFloatHelper
 
     private WindowManager.LayoutParams mWindowParams;
     private boolean mIsAddedToWindow;
+
+    private SDTouchHelper mTouchHelper = new SDTouchHelper();
 
     /**
      * 设置要悬浮的view
@@ -40,7 +45,7 @@ public class SDFloatHelper
     public void restoreContentView()
     {
         ViewGroup parent = getOriginalParent();
-        if (parent != null && mContentView != null)
+        if (mContentView != null && parent != null)
         {
             addToWindow(false);
             parent.addView(mContentView, mOriginalIndex, mOriginalParams);
@@ -144,10 +149,19 @@ public class SDFloatHelper
         mOriginalParent = null;
         mOriginalParams = null;
         mOriginalIndex = -1;
+        if (mContentView != null)
+        {
+            mContentView.setOnTouchListener(null);
+        }
 
         mContentView = view;
         if (view != null)
         {
+            if (mContext == null)
+            {
+                mContext = view.getContext().getApplicationContext();
+            }
+
             final ViewParent viewParent = view.getParent();
             if (viewParent instanceof ViewGroup)
             {
@@ -156,6 +170,66 @@ public class SDFloatHelper
                 setOriginalParent(viewGroup);
                 mOriginalParams = view.getLayoutParams();
                 mOriginalIndex = viewGroup.indexOfChild(view);
+            }
+
+            view.setOnTouchListener(mInternalOnTouchListener);
+        }
+    }
+
+    private View.OnTouchListener mInternalOnTouchListener = new View.OnTouchListener()
+    {
+        @Override
+        public boolean onTouch(View v, MotionEvent event)
+        {
+            processTouchEvent(event);
+            return false;
+        }
+    };
+
+    /**
+     * 处理触摸事件
+     *
+     * @param event
+     */
+    public void processTouchEvent(MotionEvent event)
+    {
+        final View view = getContentView();
+        if (view == null)
+        {
+            return;
+        }
+        if (!mIsAddedToWindow)
+        {
+            return;
+        }
+
+        mTouchHelper.processTouchEvent(event);
+        if (event.getAction() == MotionEvent.ACTION_MOVE)
+        {
+            int dx = (int) mTouchHelper.getDeltaXFrom(SDTouchHelper.EVENT_LAST);
+            int dy = (int) mTouchHelper.getDeltaYFrom(SDTouchHelper.EVENT_LAST);
+
+            final int screenWidth = mContext.getResources().getDisplayMetrics().widthPixels;
+            final int screenHeight = mContext.getResources().getDisplayMetrics().heightPixels;
+
+            dx = mTouchHelper.getLegalDeltaX(getWindowParams().x, 0, screenWidth - view.getWidth(), dx);
+            dy = mTouchHelper.getLegalDeltaY(getWindowParams().y, 0, screenHeight - view.getHeight(), dy);
+
+            boolean needUpdate = false;
+            if (dx != 0)
+            {
+                getWindowParams().x += dx;
+                needUpdate = true;
+            }
+            if (dy != 0)
+            {
+                getWindowParams().y += dy;
+                needUpdate = true;
+            }
+
+            if (needUpdate)
+            {
+                SDWindowManager.getInstance().updateViewLayout(view, getWindowParams());
             }
         }
     }

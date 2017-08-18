@@ -9,7 +9,6 @@ import com.fanwe.library.windowmanager.SDFloatHelper;
 
 public class MainActivity extends AppCompatActivity
 {
-
     private SDFloatHelper mFloatHelper = new SDFloatHelper();
     private SDFloatHelper mNewActivityFloatHelper = new SDFloatHelper();
 

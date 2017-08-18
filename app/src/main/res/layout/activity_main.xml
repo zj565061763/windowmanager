@@ -34,7 +34,7 @@
         android:text="打开新Activity"/>
 
     <Button
-        android:id="@+id/btn"
+        android:id="@+id/btn_float"
         android:layout_width="wrap_content"
         android:layout_height="100dp"
         android:layout_margin="10dp"
@@ -42,7 +42,7 @@
         android:text="悬浮View"/>
 
     <Button
-        android:id="@+id/btn_onstop"
+        android:id="@+id/btn_new_activity_float"
         android:layout_width="wrap_content"
         android:layout_height="100dp"
         android:layout_margin="10dp"

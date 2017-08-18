@@ -44,4 +44,18 @@ public class MainActivity extends AppCompatActivity
     {
         mFloatHelper.restoreContentView(); //还原到原xml布局
     }
+
+    @Override
+    protected void onStop()
+    {
+        super.onStop();
+        mFloatHelper.addToWindow(false);
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        mFloatHelper.setContentView(null);
+    }
 }

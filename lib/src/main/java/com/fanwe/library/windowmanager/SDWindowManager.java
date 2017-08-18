@@ -154,7 +154,7 @@ public class SDWindowManager
     public void updateViewLayout(View view, ViewGroup.LayoutParams params)
     {
         init(view);
-        if (view == null || params == null)
+        if (params == null)
         {
             return;
         }
@@ -173,10 +173,6 @@ public class SDWindowManager
     public void removeView(View view)
     {
         init(view);
-        if (view == null)
-        {
-            return;
-        }
 
         if (containsView(view))
         {
@@ -192,10 +188,6 @@ public class SDWindowManager
     public void removeViewImmediate(View view)
     {
         init(view);
-        if (view == null)
-        {
-            return;
-        }
 
         if (containsView(view))
         {

@@ -46,14 +46,14 @@ public class MainActivity extends AppCompatActivity
     protected void onResume()
     {
         super.onResume();
-        mNewActivityFloatHelper.restoreContentView();
+        mNewActivityFloatHelper.restoreContentView(); //新界面回来的时候还原
     }
 
     @Override
     protected void onStop()
     {
         super.onStop();
-        mNewActivityFloatHelper.addToWindow(true);
+        mNewActivityFloatHelper.addToWindow(true); //打开新界面的或时候悬浮
     }
 
     @Override

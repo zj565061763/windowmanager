@@ -3,6 +3,8 @@ package com.fanwe.library.windowmanager;
 import android.content.Context;
 import android.view.MotionEvent;
 
+import com.fanwe.library.touchhelper.SDTouchHelper;
+
 /**
  * 可拖动的悬浮view
  */
@@ -39,29 +41,29 @@ public class SDDraggableFloatView extends SDFloatView
     {
         boolean result = false;
 
-        mTouchHelper.saveMoveDirection();
-        switch (mTouchHelper.getMoveDirection())
+        mTouchHelper.saveDirection();
+        switch (mTouchHelper.getDirection())
         {
             case MoveLeft:
-                if (!getContentView().canScrollHorizontally(1))
+                if (SDTouchHelper.isScrollToRight(getContentView()))
                 {
                     result = true;
                 }
                 break;
             case MoveTop:
-                if (!getContentView().canScrollVertically(1))
+                if (SDTouchHelper.isScrollToBottom(getContentView()))
                 {
                     result = true;
                 }
                 break;
             case MoveRight:
-                if (!getContentView().canScrollHorizontally(-1))
+                if (SDTouchHelper.isScrollToLeft(getContentView()))
                 {
                     result = true;
                 }
                 break;
             case MoveBottom:
-                if (!getContentView().canScrollVertically(-1))
+                if (SDTouchHelper.isScrollToTop(getContentView()))
                 {
                     result = true;
                 }

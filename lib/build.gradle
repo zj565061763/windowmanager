@@ -25,6 +25,7 @@ android {
 }
 
 dependencies {
+    compile 'com.fanwe.android:touchhelper:1.0.5'
 }
 
 publish {

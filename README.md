@@ -3,3 +3,11 @@
 
 ## 效果图
 ![](http://thumbsnap.com/i/NWunPUJZ.gif?0818)
+
+## 使用方法
+```java
+SDFloatHelper floatHelper = new SDFloatHelper(); //创建SDFloatHelper对象
+floatHelper.setContentView(findViewById(R.id.btn_float)); //设置要悬浮的view
+floatHelper.addToWindow(true); //true-添加到Window，false-从Window移除
+floatHelper.restoreContentView(); //还原到原xml布局
+```

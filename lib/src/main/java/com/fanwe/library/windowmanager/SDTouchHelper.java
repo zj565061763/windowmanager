@@ -46,6 +46,8 @@ class SDTouchHelper
     private float mUpX;
     private float mUpY;
 
+    private MoveDirection mFirstMoveDirection = MoveDirection.None;
+
     public void setDebug(boolean debug)
     {
         mDebug = debug;
@@ -73,10 +75,17 @@ class SDTouchHelper
             case MotionEvent.ACTION_MOVE:
                 mMoveX = mCurrentX;
                 mMoveY = mCurrentY;
+
+                saveMoveDirection();
                 break;
             case MotionEvent.ACTION_UP:
                 mUpX = mCurrentX;
                 mUpY = mCurrentY;
+
+                resetFirstMoveDirection();
+                break;
+            case MotionEvent.ACTION_CANCEL:
+                resetFirstMoveDirection();
                 break;
             default:
                 break;
@@ -157,6 +166,36 @@ class SDTouchHelper
     public float getUpY()
     {
         return mUpY;
+    }
+
+    private void saveMoveDirection()
+    {
+        if (mFirstMoveDirection == MoveDirection.None)
+        {
+            if (isMoveLeftFrom(EVENT_DOWN))
+            {
+                mFirstMoveDirection = MoveDirection.MoveLeft;
+            } else if (isMoveUpFrom(EVENT_DOWN))
+            {
+                mFirstMoveDirection = MoveDirection.MoveTop;
+            } else if (isMoveRightFrom(EVENT_DOWN))
+            {
+                mFirstMoveDirection = MoveDirection.MoveRight;
+            } else if (isMoveDownFrom(EVENT_DOWN))
+            {
+                mFirstMoveDirection = MoveDirection.MoveBottom;
+            }
+        }
+    }
+
+    public void resetFirstMoveDirection()
+    {
+        mFirstMoveDirection = MoveDirection.None;
+    }
+
+    public MoveDirection getFirstMoveDirection()
+    {
+        return mFirstMoveDirection;
     }
 
     /**
@@ -362,6 +401,27 @@ class SDTouchHelper
     }
 
     //----------static method end----------
+
+    public enum MoveDirection
+    {
+        None,
+        /**
+         * 向左移动
+         */
+        MoveLeft,
+        /**
+         * 向右移动
+         */
+        MoveRight,
+        /**
+         * 向上移动
+         */
+        MoveTop,
+        /**
+         * 向下移动
+         */
+        MoveBottom,
+    }
 
     public StringBuilder getDebugInfo()
     {

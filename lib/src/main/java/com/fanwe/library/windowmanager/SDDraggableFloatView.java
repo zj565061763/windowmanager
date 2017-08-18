@@ -1,6 +1,7 @@
 package com.fanwe.library.windowmanager;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.MotionEvent;
 
 /**
@@ -39,31 +40,61 @@ public class SDDraggableFloatView extends SDFloatView
     {
         boolean result = false;
 
-        if (mTouchHelper.isMoveLeftFrom(SDTouchHelper.EVENT_DOWN))
+        switch (mTouchHelper.getFirstMoveDirection())
         {
-            if (!getContentView().canScrollHorizontally(1))
-            {
-                result = true;
-            }
-        } else if (mTouchHelper.isMoveRightFrom(SDTouchHelper.EVENT_DOWN))
-        {
-            if (!getContentView().canScrollHorizontally(-1))
-            {
-                result = true;
-            }
-        } else if (mTouchHelper.isMoveUpFrom(SDTouchHelper.EVENT_DOWN))
-        {
-            if (!getContentView().canScrollVertically(1))
-            {
-                result = true;
-            }
-        } else if (mTouchHelper.isMoveDownFrom(SDTouchHelper.EVENT_DOWN))
-        {
-            if (!getContentView().canScrollVertically(-1))
-            {
-                result = true;
-            }
+            case MoveLeft:
+                if (!getContentView().canScrollHorizontally(1))
+                {
+                    result = true;
+                }
+                break;
+            case MoveTop:
+                if (!getContentView().canScrollVertically(1))
+                {
+                    result = true;
+                }
+                break;
+            case MoveRight:
+                if (!getContentView().canScrollHorizontally(-1))
+                {
+                    result = true;
+                }
+                break;
+            case MoveBottom:
+                if (!getContentView().canScrollVertically(-1))
+                {
+                    result = true;
+                }
+                break;
         }
+
+        Log.i("SDDraggableFloatView", "SDDraggableFloatView:" + mTouchHelper.getFirstMoveDirection());
+
+//        if (mTouchHelper.isMoveLeftFrom(SDTouchHelper.EVENT_DOWN))
+//        {
+//            if (!getContentView().canScrollHorizontally(1))
+//            {
+//                result = true;
+//            }
+//        } else if (mTouchHelper.isMoveRightFrom(SDTouchHelper.EVENT_DOWN))
+//        {
+//            if (!getContentView().canScrollHorizontally(-1))
+//            {
+//                result = true;
+//            }
+//        } else if (mTouchHelper.isMoveUpFrom(SDTouchHelper.EVENT_DOWN))
+//        {
+//            if (!getContentView().canScrollVertically(1))
+//            {
+//                result = true;
+//            }
+//        } else if (mTouchHelper.isMoveDownFrom(SDTouchHelper.EVENT_DOWN))
+//        {
+//            if (!getContentView().canScrollVertically(-1))
+//            {
+//                result = true;
+//            }
+//        }
         return result;
     }
 
@@ -142,6 +173,7 @@ public class SDDraggableFloatView extends SDFloatView
 
                 mTouchHelper.setNeedIntercept(false);
                 mTouchHelper.setNeedCosume(false);
+                mTouchHelper.resetFirstMoveDirection();
                 break;
         }
         return mTouchHelper.isNeedCosume() || event.getAction() == MotionEvent.ACTION_DOWN;

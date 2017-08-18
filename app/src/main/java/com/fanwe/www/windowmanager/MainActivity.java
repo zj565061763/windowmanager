@@ -1,5 +1,6 @@
 package com.fanwe.www.windowmanager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -13,6 +14,7 @@ public class MainActivity extends AppCompatActivity
 {
 
     private SDFloatHelper mFloatHelper = new SDFloatHelper();
+    private SDFloatHelper mOnStopFloatHelper = new SDFloatHelper();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -21,6 +23,8 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         mFloatHelper.setContentView(findViewById(R.id.btn)); //设置要悬浮的view
+
+        mOnStopFloatHelper.setContentView(findViewById(R.id.btn_onstop)); //设置要悬浮的view
     }
 
     public void onClickAddToWindow(View view)
@@ -45,17 +49,33 @@ public class MainActivity extends AppCompatActivity
         mFloatHelper.restoreContentView(); //还原到原xml布局
     }
 
+    public void onClickNewActivity(View view)
+    {
+        startActivity(new Intent(this, NewActivity.class));
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        mOnStopFloatHelper.restoreContentView();
+    }
+
     @Override
     protected void onStop()
     {
         super.onStop();
-        mFloatHelper.addToWindow(false);
+        mOnStopFloatHelper.addToWindow(true);
     }
 
     @Override
     protected void onDestroy()
     {
         super.onDestroy();
+        mFloatHelper.addToWindow(false);
         mFloatHelper.setContentView(null);
+
+        mOnStopFloatHelper.addToWindow(false);
+        mOnStopFloatHelper.setContentView(null);
     }
 }

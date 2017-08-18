@@ -148,16 +148,14 @@ public class SDFloatHelper
         mContentView = view;
         if (view != null)
         {
-            ViewParent viewParent = view.getParent();
+            final ViewParent viewParent = view.getParent();
             if (viewParent instanceof ViewGroup)
             {
-                ViewGroup viewGroup = (ViewGroup) viewParent;
+                final ViewGroup viewGroup = (ViewGroup) viewParent;
 
                 setOriginalParent(viewGroup);
                 mOriginalParams = view.getLayoutParams();
                 mOriginalIndex = viewGroup.indexOfChild(view);
-
-                viewGroup.removeView(view);
             }
         }
     }

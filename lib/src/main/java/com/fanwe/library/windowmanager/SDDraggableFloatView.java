@@ -114,12 +114,11 @@ public class SDDraggableFloatView extends SDFloatView
 
                     final int screenWidth = getResources().getDisplayMetrics().widthPixels;
                     final int screenHeight = getResources().getDisplayMetrics().heightPixels;
+                    final int maxX = screenWidth - getContentView().getWidth();
+                    final int maxY = screenHeight - getContentView().getHeight();
 
-                    int x = getWindowParams().x;
-                    int y = getWindowParams().y;
-
-                    dx = mTouchHelper.getLegalDeltaX(x, 0, screenWidth - getContentView().getWidth(), dx);
-                    dy = mTouchHelper.getLegalDeltaY(y, 0, screenHeight - getContentView().getHeight(), dy);
+                    dx = mTouchHelper.getLegalDeltaX(getWindowParams().x, 0, maxX, dx);
+                    dy = mTouchHelper.getLegalDeltaY(getWindowParams().y, 0, maxY, dy);
 
                     if (dx != 0 || dy != 0)
                     {

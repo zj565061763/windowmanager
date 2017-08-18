@@ -1,6 +1,5 @@
 package com.fanwe.library.windowmanager;
 
-import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -10,10 +9,8 @@ import java.lang.ref.WeakReference;
 /**
  * Created by Administrator on 2017/8/18.
  */
-public class SDViewHelper
+class SDViewHelper
 {
-    private Context mContext;
-
     private WeakReference<ViewGroup> mParent;
     private ViewGroup.LayoutParams mParams;
     private int mIndex = -1;
@@ -39,11 +36,6 @@ public class SDViewHelper
                 final ViewGroup viewGroup = (ViewGroup) viewParent;
                 setParent(viewGroup);
                 mIndex = viewGroup.indexOfChild(view);
-            }
-
-            if (mContext == null)
-            {
-                mContext = view.getContext().getApplicationContext();
             }
         }
     }
@@ -73,21 +65,34 @@ public class SDViewHelper
     }
 
     /**
-     * 把保存的信息还原到view
+     * 把view还原到原来的parent
      *
      * @param view
+     * @return
      */
-    public void restore(View view)
+    public boolean restore(View view)
     {
         if (!canRestore(view))
         {
-            return;
+            return false;
         }
 
-        removeViewFromParent(view);
-        getParent().addView(view, mIndex, mParams);
+        try
+        {
+            removeViewFromParent(view);
+            getParent().addView(view, mIndex, mParams);
+            return true;
+        } catch (Exception e)
+        {
+            return false;
+        }
     }
 
+    /**
+     * 把View从它的Parent上移除
+     *
+     * @param view
+     */
     public static void removeViewFromParent(View view)
     {
         if (view == null)
@@ -146,15 +151,5 @@ public class SDViewHelper
     public int getIndex()
     {
         return mIndex;
-    }
-
-    /**
-     * 返回保存的Context
-     *
-     * @return
-     */
-    public Context getContext()
-    {
-        return mContext;
     }
 }

@@ -5,12 +5,13 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import com.fanwe.library.windowmanager.SDFloatHelper;
+import com.fanwe.library.windowmanager.SDDraggableFloatView;
+
 
 public class MainActivity extends AppCompatActivity
 {
-    private SDFloatHelper mFloatHelper = new SDFloatHelper();
-    private SDFloatHelper mNewActivityFloatHelper = new SDFloatHelper();
+    private SDDraggableFloatView mFloatView;
+    private SDDraggableFloatView mNewActivityFloatView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -18,23 +19,26 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mFloatHelper.setContentView(findViewById(R.id.btn_float)); //设置要悬浮的view
-        mNewActivityFloatHelper.setContentView(findViewById(R.id.btn_new_activity_float)); //设置要悬浮的view
+        mFloatView = new SDDraggableFloatView(this);
+        mFloatView.setContentView(findViewById(R.id.btn_float)); //设置要悬浮的view
+
+        mNewActivityFloatView = new SDDraggableFloatView(this);
+        mNewActivityFloatView.setContentView(findViewById(R.id.btn_new_activity_float)); //设置要悬浮的view
     }
 
     public void onClickAddToWindow(View view)
     {
-        mFloatHelper.addToWindow(true); //true-添加到Window
+        mFloatView.addToWindow(true); //true-添加到Window
     }
 
     public void onClickRemoveFromWindow(View view)
     {
-        mFloatHelper.addToWindow(false); //false-从Window移除
+        mFloatView.addToWindow(false); //false-从Window移除
     }
 
     public void onClickRestore(View view)
     {
-        mFloatHelper.restoreContentView(); //还原到原xml布局
+        mFloatView.restoreContentView(); //还原到原xml布局
     }
 
     public void onClickNewActivity(View view)
@@ -46,21 +50,21 @@ public class MainActivity extends AppCompatActivity
     protected void onResume()
     {
         super.onResume();
-        mNewActivityFloatHelper.restoreContentView(); //新界面回来的时候还原
+        mNewActivityFloatView.restoreContentView(); //新界面回来的时候还原
     }
 
     @Override
     protected void onStop()
     {
         super.onStop();
-        mNewActivityFloatHelper.addToWindow(true); //打开新界面的或时候悬浮
+        mNewActivityFloatView.addToWindow(true); //打开新界面的或时候悬浮
     }
 
     @Override
     protected void onDestroy()
     {
         super.onDestroy();
-        mFloatHelper.addToWindow(false);
-        mNewActivityFloatHelper.addToWindow(false);
+        mFloatView.addToWindow(false);
+        mNewActivityFloatView.addToWindow(false);
     }
 }

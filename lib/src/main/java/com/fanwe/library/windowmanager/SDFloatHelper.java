@@ -87,16 +87,6 @@ public class SDFloatHelper
         mWindowParams = windowParams;
     }
 
-    private void keepOriginalSize()
-    {
-        if (mOriginalParams == null)
-        {
-            return;
-        }
-        getWindowParams().width = mOriginalParams.width;
-        getWindowParams().height = mOriginalParams.height;
-    }
-
     /**
      * 是否添加到Window
      *
@@ -177,9 +167,14 @@ public class SDFloatHelper
                 setOriginalParent(viewGroup);
                 mOriginalParams = view.getLayoutParams();
                 mOriginalIndex = viewGroup.indexOfChild(view);
+
+                if (mOriginalParams != null)
+                {
+                    getWindowParams().width = mOriginalParams.width;
+                    getWindowParams().height = mOriginalParams.height;
+                }
             }
 
-            keepOriginalSize();
             view.setOnTouchListener(mInternalOnTouchListener);
         }
     }

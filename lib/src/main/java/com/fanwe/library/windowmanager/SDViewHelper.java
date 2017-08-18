@@ -70,22 +70,15 @@ class SDViewHelper
      * @param view
      * @return
      */
-    public boolean restore(View view)
+    public void restore(View view)
     {
         if (!canRestore(view))
         {
-            return false;
+            return;
         }
 
-        try
-        {
-            removeViewFromParent(view);
-            getParent().addView(view, mIndex, mParams);
-            return true;
-        } catch (Exception e)
-        {
-            return false;
-        }
+        removeViewFromParent(view);
+        getParent().addView(view, mIndex, mParams);
     }
 
     /**

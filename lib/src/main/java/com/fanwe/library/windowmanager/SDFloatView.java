@@ -43,13 +43,11 @@ public class SDFloatView extends FrameLayout
 
     /**
      * 还原悬浮view到原parent
-     *
-     * @return
      */
-    public boolean restoreContentView()
+    public void restoreContentView()
     {
         addToWindow(false);
-        return mViewHelper.restore(mContentView);
+        mViewHelper.restore(mContentView);
     }
 
     /**

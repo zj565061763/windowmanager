@@ -24,6 +24,11 @@ public class SDFloatHelper
     private WindowManager.LayoutParams mWindowParams;
 
     /**
+     * 是否可以拖动
+     */
+    private boolean mIsDraggable = true;
+
+    /**
      * 设置要悬浮的view
      *
      * @param view
@@ -68,6 +73,16 @@ public class SDFloatHelper
     public View getContentView()
     {
         return mContentView;
+    }
+
+    /**
+     * 设置是否可以拖动，默认可以拖动
+     *
+     * @param draggable
+     */
+    public void setDraggable(boolean draggable)
+    {
+        mIsDraggable = draggable;
     }
 
     /**
@@ -222,6 +237,10 @@ public class SDFloatHelper
      */
     public void processTouchEvent(MotionEvent event)
     {
+        if (!mIsDraggable)
+        {
+            return;
+        }
         final View view = getContentView();
         if (view == null)
         {

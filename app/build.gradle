@@ -28,5 +28,4 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile project(':lib')
     compile 'com.github.czy1121:settingscompat:1.1.4'
-    compile 'com.fanwe.android:libCore:1.0.73'
 }

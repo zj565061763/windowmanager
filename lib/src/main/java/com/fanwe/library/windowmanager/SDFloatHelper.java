@@ -85,6 +85,18 @@ public class SDFloatHelper
             return;
         }
         mWindowParams = windowParams;
+        updateViewLayout();
+    }
+
+    /**
+     * 根据LayoutParams更新布局
+     */
+    public void updateViewLayout()
+    {
+        if (isAddedToWindow())
+        {
+            SDWindowManager.getInstance().updateViewLayout(getContentView(), getWindowParams());
+        }
     }
 
     /**

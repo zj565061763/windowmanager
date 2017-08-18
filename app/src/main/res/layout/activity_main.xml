@@ -53,4 +53,9 @@
             android:text="新Activity悬浮View"/>
     </FrameLayout>
 
+    <ListView
+        android:id="@+id/lv_content"
+        android:layout_width="200dp"
+        android:layout_height="200dp"/>
+
 </LinearLayout>

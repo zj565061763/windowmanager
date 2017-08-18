@@ -22,7 +22,6 @@ public class SDFloatHelper
     private int mOriginalIndex = -1;
 
     private WindowManager.LayoutParams mWindowParams;
-    private boolean mIsAddedToWindow;
 
     /**
      * 设置要悬浮的view
@@ -89,6 +88,16 @@ public class SDFloatHelper
         mWindowParams = windowParams;
     }
 
+    private void keepOriginalSize()
+    {
+        if (mOriginalParams == null)
+        {
+            return;
+        }
+        getWindowParams().width = mOriginalParams.width;
+        getWindowParams().height = mOriginalParams.height;
+    }
+
     /**
      * 是否添加到Window
      *
@@ -104,16 +113,17 @@ public class SDFloatHelper
 
         if (add)
         {
-            if (!mIsAddedToWindow)
+            if (!isAddedToWindow())
             {
                 removeViewFromParent(view);
                 SDWindowManager.getInstance().addView(view, getWindowParams());
-                mIsAddedToWindow = true;
             }
         } else
         {
-            SDWindowManager.getInstance().removeViewImmediate(view);
-            mIsAddedToWindow = false;
+            if (isAddedToWindow())
+            {
+                SDWindowManager.getInstance().removeViewImmediate(view);
+            }
         }
     }
 
@@ -139,7 +149,7 @@ public class SDFloatHelper
      */
     public boolean isAddedToWindow()
     {
-        return mIsAddedToWindow;
+        return SDWindowManager.getInstance().hasView(mContentView);
     }
 
     private void saveViewInfo(View view)
@@ -170,6 +180,7 @@ public class SDFloatHelper
                 mOriginalIndex = viewGroup.indexOfChild(view);
             }
 
+            keepOriginalSize();
             view.setOnTouchListener(mInternalOnTouchListener);
         }
     }
@@ -199,7 +210,7 @@ public class SDFloatHelper
         {
             return;
         }
-        if (!mIsAddedToWindow)
+        if (!isAddedToWindow())
         {
             return;
         }

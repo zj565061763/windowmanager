@@ -267,4 +267,20 @@ public class SDWindowManager
         return getFirstView(clazz) != null;
     }
 
+    /**
+     * 是否有指定的view
+     *
+     * @param view
+     * @return
+     */
+    public boolean hasView(View view)
+    {
+        if (view == null || mMapView.isEmpty())
+        {
+            return false;
+        }
+
+        return mMapView.containsKey(view);
+    }
+
 }

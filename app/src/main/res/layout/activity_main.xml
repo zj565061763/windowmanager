@@ -13,6 +13,13 @@
         android:text="添加到Window"/>
 
     <Button
+        android:id="@+id/btn_remove"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onClickRemoveFromWindow"
+        android:text="从Window移除"/>
+
+    <Button
         android:id="@+id/btn_restore"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,7 +29,7 @@
     <Button
         android:id="@+id/btn"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
         android:text="Hello World!"/>
 
 </LinearLayout>

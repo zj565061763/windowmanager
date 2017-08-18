@@ -3,7 +3,6 @@ package com.fanwe.www.runnable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Toast;
 
 import com.fanwe.library.windowmanager.SDFloatHelper;
 
@@ -17,26 +16,21 @@ public class MainActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        findViewById(R.id.btn).setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                Toast.makeText(getApplication(), "click", 0).show();
-            }
-        });
-
-        mFloatHelper.setContentView(findViewById(R.id.btn));
     }
 
     public void onClickAddToWindow(View view)
     {
-        mFloatHelper.addToWindow(true);
+        mFloatHelper.setContentView(findViewById(R.id.btn)); //设置要悬浮的view
+        mFloatHelper.addToWindow(true); //true-添加到Window
+    }
+
+    public void onClickRemoveFromWindow(View view)
+    {
+        mFloatHelper.addToWindow(false); //false-从Window移除
     }
 
     public void onClickRestore(View view)
     {
-        mFloatHelper.restoreContentView();
+        mFloatHelper.restoreContentView(); //还原到原xml布局
     }
 }

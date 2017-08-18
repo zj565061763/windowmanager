@@ -6,9 +6,9 @@
 
 ## 使用方法
 ```java
-SDFloatHelper floatHelper = new SDFloatHelper(); //创建SDFloatHelper对象
-floatHelper.setContentView(findViewById(R.id.btn_float)); //设置要悬浮的view
-floatHelper.addToWindow(true); //true-添加到Window，false-从Window移除
-floatHelper.restoreContentView(); //还原到原xml布局
+SDDraggableFloatView floatView = new SDDraggableFloatView(context);
+floatView.setContentView(btn); //设置要悬浮的view
+floatView.addToWindow(true); //true-添加到Window，false-从Window移除
+floatView.restoreContentView(); //还原到原xml布局
 //更多方法请参考源码...
 ```

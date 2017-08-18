@@ -12,7 +12,7 @@ class SDTouchHelper
 {
     private static final String TAG = "SDTouchHelper";
 
-    private boolean mDebug;
+    private boolean mIsDebug;
 
     /**
      * 最后一次ACTION_DOWN事件
@@ -46,11 +46,11 @@ class SDTouchHelper
     private float mUpX;
     private float mUpY;
 
-    private MoveDirection mFirstMoveDirection = MoveDirection.None;
+    private MoveDirection mMoveDirection = MoveDirection.None;
 
     public void setDebug(boolean debug)
     {
-        mDebug = debug;
+        mIsDebug = debug;
     }
 
     /**
@@ -71,27 +71,22 @@ class SDTouchHelper
             case MotionEvent.ACTION_DOWN:
                 mDownX = mCurrentX;
                 mDownY = mCurrentY;
+
+                setMoveDirection(MoveDirection.None);
                 break;
             case MotionEvent.ACTION_MOVE:
                 mMoveX = mCurrentX;
                 mMoveY = mCurrentY;
-
-                saveMoveDirection();
                 break;
             case MotionEvent.ACTION_UP:
                 mUpX = mCurrentX;
                 mUpY = mCurrentY;
-
-                resetFirstMoveDirection();
-                break;
-            case MotionEvent.ACTION_CANCEL:
-                resetFirstMoveDirection();
                 break;
             default:
                 break;
         }
 
-        if (mDebug)
+        if (mIsDebug)
         {
             StringBuilder sb = getDebugInfo();
             Log.i(TAG, "event " + ev.getAction() + ":" + sb.toString());
@@ -168,34 +163,58 @@ class SDTouchHelper
         return mUpY;
     }
 
-    private void saveMoveDirection()
+    /**
+     * 保存当前移动方向
+     */
+    public void saveMoveDirection()
     {
-        if (mFirstMoveDirection == MoveDirection.None)
+        if (mMoveDirection == MoveDirection.None)
         {
-            if (isMoveLeftFrom(EVENT_DOWN))
+            final float dx = getDeltaXFrom(EVENT_DOWN);
+            final float dy = getDeltaYFrom(EVENT_DOWN);
+
+            if (dx != 0 || dy != 0)
             {
-                mFirstMoveDirection = MoveDirection.MoveLeft;
-            } else if (isMoveUpFrom(EVENT_DOWN))
-            {
-                mFirstMoveDirection = MoveDirection.MoveTop;
-            } else if (isMoveRightFrom(EVENT_DOWN))
-            {
-                mFirstMoveDirection = MoveDirection.MoveRight;
-            } else if (isMoveDownFrom(EVENT_DOWN))
-            {
-                mFirstMoveDirection = MoveDirection.MoveBottom;
+                if (Math.abs(dx) > Math.abs(dy))
+                {
+                    if (dx < 0)
+                    {
+                        setMoveDirection(MoveDirection.MoveLeft);
+                    } else if (dx > 0)
+                    {
+                        setMoveDirection(MoveDirection.MoveRight);
+                    }
+                } else
+                {
+                    if (dy < 0)
+                    {
+                        setMoveDirection(MoveDirection.MoveTop);
+                    } else if (dy > 0)
+                    {
+                        setMoveDirection(MoveDirection.MoveBottom);
+                    }
+                }
             }
         }
     }
 
-    public void resetFirstMoveDirection()
+    private void setMoveDirection(MoveDirection moveDirection)
     {
-        mFirstMoveDirection = MoveDirection.None;
+        mMoveDirection = moveDirection;
+        if (mIsDebug)
+        {
+            Log.i(TAG, "setMoveDirection:" + moveDirection);
+        }
     }
 
-    public MoveDirection getFirstMoveDirection()
+    /**
+     * 返回已保存的移动方向
+     *
+     * @return
+     */
+    public MoveDirection getMoveDirection()
     {
-        return mFirstMoveDirection;
+        return mMoveDirection;
     }
 
     /**
@@ -286,6 +305,17 @@ class SDTouchHelper
     }
 
     /**
+     * 返回当前事件相对于指定事件是否向上移动
+     *
+     * @param event {@link #EVENT_DOWN} {@link #EVENT_LAST}
+     * @return
+     */
+    public boolean isMoveTopFrom(int event)
+    {
+        return getDeltaYFrom(event) < 0;
+    }
+
+    /**
      * 返回当前事件相对于指定事件是否向右移动
      *
      * @param event {@link #EVENT_DOWN} {@link #EVENT_LAST}
@@ -297,23 +327,12 @@ class SDTouchHelper
     }
 
     /**
-     * 返回当前事件相对于指定事件是否向上移动
-     *
-     * @param event {@link #EVENT_DOWN} {@link #EVENT_LAST}
-     * @return
-     */
-    public boolean isMoveUpFrom(int event)
-    {
-        return getDeltaYFrom(event) < 0;
-    }
-
-    /**
      * 返回当前事件相对于指定事件是否向下移动
      *
      * @param event {@link #EVENT_DOWN} {@link #EVENT_LAST}
      * @return
      */
-    public boolean isMoveDownFrom(int event)
+    public boolean isMoveBottomFrom(int event)
     {
         return getDeltaYFrom(event) > 0;
     }
@@ -362,7 +381,7 @@ class SDTouchHelper
     public int getLegalDeltaY(int top, int minTop, int maxTop, int dy)
     {
         int future = top + dy;
-        if (isMoveUpFrom(EVENT_LAST))
+        if (isMoveTopFrom(EVENT_LAST))
         {
             //如果向上拖动
             if (future < minTop)
@@ -370,7 +389,7 @@ class SDTouchHelper
                 int comsume = minTop - future;
                 dy += comsume;
             }
-        } else if (isMoveDownFrom(EVENT_LAST))
+        } else if (isMoveBottomFrom(EVENT_LAST))
         {
             //如果向下拖动
             if (future > maxTop)
@@ -410,13 +429,13 @@ class SDTouchHelper
          */
         MoveLeft,
         /**
-         * 向右移动
-         */
-        MoveRight,
-        /**
          * 向上移动
          */
         MoveTop,
+        /**
+         * 向右移动
+         */
+        MoveRight,
         /**
          * 向下移动
          */

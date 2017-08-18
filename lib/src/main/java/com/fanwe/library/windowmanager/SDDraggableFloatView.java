@@ -1,7 +1,6 @@
 package com.fanwe.library.windowmanager;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.MotionEvent;
 
 /**
@@ -40,7 +39,8 @@ public class SDDraggableFloatView extends SDFloatView
     {
         boolean result = false;
 
-        switch (mTouchHelper.getFirstMoveDirection())
+        mTouchHelper.saveMoveDirection();
+        switch (mTouchHelper.getMoveDirection())
         {
             case MoveLeft:
                 if (!getContentView().canScrollHorizontally(1))
@@ -67,34 +67,6 @@ public class SDDraggableFloatView extends SDFloatView
                 }
                 break;
         }
-
-        Log.i("SDDraggableFloatView", "SDDraggableFloatView:" + mTouchHelper.getFirstMoveDirection());
-
-//        if (mTouchHelper.isMoveLeftFrom(SDTouchHelper.EVENT_DOWN))
-//        {
-//            if (!getContentView().canScrollHorizontally(1))
-//            {
-//                result = true;
-//            }
-//        } else if (mTouchHelper.isMoveRightFrom(SDTouchHelper.EVENT_DOWN))
-//        {
-//            if (!getContentView().canScrollHorizontally(-1))
-//            {
-//                result = true;
-//            }
-//        } else if (mTouchHelper.isMoveUpFrom(SDTouchHelper.EVENT_DOWN))
-//        {
-//            if (!getContentView().canScrollVertically(1))
-//            {
-//                result = true;
-//            }
-//        } else if (mTouchHelper.isMoveDownFrom(SDTouchHelper.EVENT_DOWN))
-//        {
-//            if (!getContentView().canScrollVertically(-1))
-//            {
-//                result = true;
-//            }
-//        }
         return result;
     }
 
@@ -173,7 +145,6 @@ public class SDDraggableFloatView extends SDFloatView
 
                 mTouchHelper.setNeedIntercept(false);
                 mTouchHelper.setNeedCosume(false);
-                mTouchHelper.resetFirstMoveDirection();
                 break;
         }
         return mTouchHelper.isNeedCosume() || event.getAction() == MotionEvent.ACTION_DOWN;

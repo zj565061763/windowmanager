@@ -10,7 +10,7 @@ import android.view.WindowManager;
 import java.lang.ref.WeakReference;
 
 /**
- * 悬浮view
+ * 悬浮view帮助类
  */
 public class SDFloatHelper
 {

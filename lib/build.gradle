@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.novoda.bintray-release'
 
 android {
     compileSdkVersion 25
@@ -24,4 +25,21 @@ android {
 }
 
 dependencies {
+}
+
+publish {
+    userOrg = 'zj565061763'
+    groupId = 'com.fanwe.android'
+    artifactId = 'windowmanager'
+    publishVersion = '1.0.0'
+    desc = 'fanwe android window manager library'
+    website = 'https://github.com/zj565061763/WindowManager'
+}
+
+tasks.withType(Javadoc) {
+    options {
+        encoding "UTF-8"
+        charSet 'UTF-8'
+        failOnError false
+    }
 }

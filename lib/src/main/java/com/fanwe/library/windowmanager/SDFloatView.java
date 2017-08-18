@@ -74,6 +74,11 @@ public class SDFloatView extends FrameLayout
         return mWindowParams;
     }
 
+    public void updateViewLayout()
+    {
+        SDWindowManager.getInstance().updateViewLayout(this, getWindowParams());
+    }
+
     /**
      * 把contentView添加到当前view
      */

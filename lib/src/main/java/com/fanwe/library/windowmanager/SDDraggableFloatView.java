@@ -2,7 +2,6 @@ package com.fanwe.library.windowmanager;
 
 import android.content.Context;
 import android.view.MotionEvent;
-import android.view.View;
 
 /**
  * 可拖动的悬浮view
@@ -12,12 +11,19 @@ public class SDDraggableFloatView extends SDFloatView
     public SDDraggableFloatView(Context context)
     {
         super(context);
+        init();
     }
+
+    private SDTouchHelper mTouchHelper = new SDTouchHelper();
 
     /**
      * 是否可以拖动
      */
     private boolean mIsDraggable = true;
+
+    private void init()
+    {
+    }
 
     /**
      * 设置是否可以拖动，默认可以拖动
@@ -29,126 +35,114 @@ public class SDDraggableFloatView extends SDFloatView
         mIsDraggable = draggable;
     }
 
-    @Override
-    public void setContentView(View view)
+    private boolean canDrag()
     {
-        View oldView = getContentView();
-        if (oldView != null)
+        if (mTouchHelper.isMoveLeftFrom(SDTouchHelper.EVENT_DOWN))
         {
-            oldView.setOnTouchListener(null);
-        }
-
-        super.setContentView(view);
-
-        if (view != null)
+            if (!getContentView().canScrollHorizontally(1))
+            {
+                return true;
+            }
+        } else if (mTouchHelper.isMoveRightFrom(SDTouchHelper.EVENT_DOWN))
         {
-            view.setOnTouchListener(mInternalOnTouchListener);
+            if (!getContentView().canScrollHorizontally(-1))
+            {
+                return true;
+            }
+        } else if (mTouchHelper.isMoveUpFrom(SDTouchHelper.EVENT_DOWN))
+        {
+            if (!getContentView().canScrollVertically(1))
+            {
+                return true;
+            }
+        } else if (mTouchHelper.isMoveDownFrom(SDTouchHelper.EVENT_DOWN))
+        {
+            if (!getContentView().canScrollVertically(-1))
+            {
+                return true;
+            }
         }
+        return false;
     }
 
-    private OnTouchListener mInternalOnTouchListener = new OnTouchListener()
+    private boolean dontProcessTouchEvent()
     {
-        @Override
-        public boolean onTouch(View v, MotionEvent event)
+        return (!mIsDraggable || getContentView() == null || !isAddedToWindow());
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev)
+    {
+        if (dontProcessTouchEvent())
         {
-            processTouchEvent(event);
             return false;
         }
-    };
 
-    private int mLastX;
-    private int mLastY;
+        if (mTouchHelper.isNeedIntercept())
+        {
+            return true;
+        }
+        mTouchHelper.processTouchEvent(ev);
+        switch (ev.getAction())
+        {
+            case MotionEvent.ACTION_MOVE:
+                if (canDrag())
+                {
+                    mTouchHelper.setNeedIntercept(true);
+                }
+                break;
+        }
+        return mTouchHelper.isNeedIntercept();
+    }
 
-    private void processTouchEvent(MotionEvent event)
+    @Override
+    public boolean onTouchEvent(MotionEvent event)
     {
-        if (!mIsDraggable)
+        if (dontProcessTouchEvent())
         {
-            return;
+            return false;
         }
-        final View view = getContentView();
-        if (view == null)
-        {
-            return;
-        }
-        if (!isAddedToWindow())
-        {
-            return;
-        }
+
+        mTouchHelper.processTouchEvent(event);
         switch (event.getAction())
         {
-            case MotionEvent.ACTION_DOWN:
-                mLastX = (int) event.getRawX();
-                mLastY = (int) event.getRawY();
-                break;
             case MotionEvent.ACTION_MOVE:
-                final int screenWidth = getContext().getResources().getDisplayMetrics().widthPixels;
-                final int screenHeight = getContext().getResources().getDisplayMetrics().heightPixels;
-                final int maxX = screenWidth - view.getWidth();
-                final int maxY = screenHeight - view.getHeight();
-
-                final int moveX = (int) event.getRawX();
-                final int moveY = (int) event.getRawY();
-
-                int dx = moveX - mLastX;
-                int dy = moveY - mLastY;
-
-                mLastX = moveX;
-                mLastY = moveY;
-
-                if (dx > 0)
+                if (mTouchHelper.isNeedCosume())
                 {
-                    if (view.canScrollHorizontally(-1))
+                    int dx = (int) mTouchHelper.getDeltaXFrom(SDTouchHelper.EVENT_LAST);
+                    int dy = (int) mTouchHelper.getDeltaYFrom(SDTouchHelper.EVENT_LAST);
+
+                    final int screenWidth = getResources().getDisplayMetrics().widthPixels;
+                    final int screenHeight = getResources().getDisplayMetrics().heightPixels;
+
+                    int x = getWindowParams().x;
+                    int y = getWindowParams().y;
+
+                    dx = mTouchHelper.getLegalDeltaX(x, 0, screenWidth - getContentView().getWidth(), dx);
+                    dy = mTouchHelper.getLegalDeltaY(y, 0, screenHeight - getContentView().getHeight(), dy);
+
+                    if (dx != 0 || dy != 0)
                     {
-                        dx = 0;
+                        getWindowParams().x += dx;
+                        getWindowParams().y += dy;
+                        updateViewLayout();
                     }
-                } else if (dx < 0)
+                } else
                 {
-                    if (view.canScrollHorizontally(1))
+                    if (canDrag() || mTouchHelper.isNeedIntercept())
                     {
-                        dx = 0;
-                    }
-                }
-
-                if (dy > 0)
-                {
-                    if (view.canScrollVertically(-1))
-                    {
-                        dy = 0;
-                    }
-                } else if (dy < 0)
-                {
-                    if (view.canScrollVertically(1))
-                    {
-                        dy = 0;
+                        mTouchHelper.setNeedCosume(true);
                     }
                 }
+                break;
 
-                int x = getWindowParams().x + dx;
-                int y = getWindowParams().y + dy;
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL:
 
-                if (x < 0)
-                {
-                    x = 0;
-                } else if (x > maxX)
-                {
-                    x = maxX;
-                }
-
-                if (y < 0)
-                {
-                    y = 0;
-                } else if (y > maxY)
-                {
-                    y = maxY;
-                }
-
-                if (getWindowParams().x != x || getWindowParams().y != y)
-                {
-                    getWindowParams().x = x;
-                    getWindowParams().y = y;
-                    SDWindowManager.getInstance().updateViewLayout(this, getWindowParams());
-                }
+                mTouchHelper.setNeedIntercept(false);
+                mTouchHelper.setNeedCosume(false);
                 break;
         }
+        return mTouchHelper.isNeedCosume() || event.getAction() == MotionEvent.ACTION_DOWN;
     }
 }

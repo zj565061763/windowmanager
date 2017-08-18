@@ -3,6 +3,7 @@ package com.fanwe.www.windowmanager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Toast;
 
 import com.fanwe.library.windowmanager.SDFloatHelper;
 
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity
         } else
         {
             SettingsCompat.manageDrawOverlays(this);
+            Toast.makeText(this, "请打开悬浮窗权限", Toast.LENGTH_SHORT).show();
         }
     }
 

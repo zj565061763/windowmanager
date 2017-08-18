@@ -46,7 +46,6 @@ public class SDFloatHelper
         {
             addToWindow(false);
             originalParent.addView(mContentView, mOriginalIndex, mOriginalParams);
-            saveViewInfo(null);
         }
     }
 

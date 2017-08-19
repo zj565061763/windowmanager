@@ -34,6 +34,8 @@ public class SDFloatView extends FrameLayout
         {
             return;
         }
+        addToWindow(false);
+
         if (mContentView != null)
         {
             if (mContentView.getParent() == this)
@@ -50,15 +52,6 @@ public class SDFloatView extends FrameLayout
         {
             getWindowParams().width = mViewHelper.getParams().width;
             getWindowParams().height = mViewHelper.getParams().height;
-            if (isAddedToWindow())
-            {
-                updateViewLayout();
-            }
-        }
-
-        if (view == null)
-        {
-            addToWindow(false);
         }
     }
 

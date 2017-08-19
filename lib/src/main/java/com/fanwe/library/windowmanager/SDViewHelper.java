@@ -22,9 +22,7 @@ class SDViewHelper
      */
     public void save(View view)
     {
-        mParent = null;
-        mParams = null;
-        mIndex = -1;
+        reset();
 
         if (view != null)
         {

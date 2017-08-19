@@ -34,13 +34,6 @@ public class SDFloatView extends FrameLayout
         {
             return;
         }
-        if (mContentView != null)
-        {
-            //还原LayoutParams
-            mContentView.setLayoutParams(mViewHelper.getParams());
-        }
-        mViewHelper.reset();
-
         mContentView = view;
 
         mViewHelper.save(view);

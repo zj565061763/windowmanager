@@ -163,7 +163,7 @@ public class SDFloatView extends FrameLayout
 
     private boolean dontProcessTouchEvent()
     {
-        return (!mIsDraggable || getContentView() == null || !isAddedToWindow());
+        return (!mIsDraggable || getContentView() == null || getContentView().getParent() != this);
     }
 
     private boolean canDrag()

@@ -82,6 +82,16 @@ class SDViewHelper
     }
 
     /**
+     * 重置，清除保存的数据
+     */
+    public void reset()
+    {
+        setParent(null);
+        mParams = null;
+        mIndex = -1;
+    }
+
+    /**
      * 把View从它的Parent上移除
      *
      * @param view

@@ -114,6 +114,16 @@ public class SDFloatView extends FrameLayout
 
         final FrameLayout.LayoutParams params = generateDefaultLayoutParams();
         view.setLayoutParams(params);
+        onContentViewAdd(view);
+    }
+
+    /**
+     * contentview被添加到当前view
+     *
+     * @param view
+     */
+    protected void onContentViewAdd(View view)
+    {
         addView(view, 0);
     }
 

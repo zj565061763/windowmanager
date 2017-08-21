@@ -6,8 +6,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
-import com.fanwe.library.touchhelper.SDTouchHelper;
-
 /**
  * 悬浮view
  */

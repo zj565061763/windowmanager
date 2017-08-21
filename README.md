@@ -5,7 +5,7 @@
 `compile 'com.fanwe.android:windowmanager:1.0.1'`
 
 ## 效果图
-![](http://thumbsnap.com/i/NWunPUJZ.gif?0818)
+![](http://thumbsnap.com/i/qzYljsOJ.gif?0820)
 
 ## 使用方法
 ```java

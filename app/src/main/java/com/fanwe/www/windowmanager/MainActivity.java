@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity
     protected void onDestroy()
     {
         super.onDestroy();
-        mFloatView.addToWindow(false);
-        mNewActivityFloatView.addToWindow(false);
+        mFloatView.setContentView(null);
+        mNewActivityFloatView.setContentView(null);
     }
 }

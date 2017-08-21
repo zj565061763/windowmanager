@@ -8,8 +8,8 @@ android {
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 17082101
-        versionName "1.0.1"
+        versionCode 17082102
+        versionName "1.0.2"
     }
     buildTypes {
         release {
@@ -32,7 +32,7 @@ publish {
     userOrg = 'zj565061763'
     groupId = 'com.fanwe.android'
     artifactId = 'windowmanager'
-    publishVersion = '1.0.1'
+    publishVersion = '1.0.2'
     desc = 'fanwe android window manager library'
     website = 'https://github.com/zj565061763/WindowManager'
 }

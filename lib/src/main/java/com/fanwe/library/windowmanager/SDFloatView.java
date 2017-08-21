@@ -18,7 +18,7 @@ public class SDFloatView extends FrameLayout
         super(context.getApplicationContext());
     }
 
-    private View mContentView;
+    private View mFloatView;
     private SDViewHelper mViewHelper = new SDViewHelper();
 
     private WindowManager.LayoutParams mWindowParams;
@@ -28,24 +28,24 @@ public class SDFloatView extends FrameLayout
      *
      * @param view
      */
-    public void setContentView(View view)
+    public void setFloatView(View view)
     {
-        if (mContentView == view)
+        if (mFloatView == view)
         {
             return;
         }
         addToWindow(false);
 
-        if (mContentView != null)
+        if (mFloatView != null)
         {
-            if (mContentView.getParent() == this)
+            if (mFloatView.getParent() == this)
             {
-                removeView(mContentView);
-                mContentView.setLayoutParams(mViewHelper.getParams());
+                removeView(mFloatView);
+                mFloatView.setLayoutParams(mViewHelper.getParams());
             }
         }
 
-        mContentView = view;
+        mFloatView = view;
 
         mViewHelper.save(view);
         if (mViewHelper.getParams() != null)
@@ -58,10 +58,10 @@ public class SDFloatView extends FrameLayout
     /**
      * 还原悬浮view到原parent
      */
-    public void restoreContentView()
+    public void restoreFloatView()
     {
         addToWindow(false);
-        mViewHelper.restore(mContentView);
+        mViewHelper.restore(mFloatView);
     }
 
     /**
@@ -69,9 +69,9 @@ public class SDFloatView extends FrameLayout
      *
      * @return
      */
-    public View getContentView()
+    public View getFloatView()
     {
-        return mContentView;
+        return mFloatView;
     }
 
     /**
@@ -97,11 +97,11 @@ public class SDFloatView extends FrameLayout
     }
 
     /**
-     * 把contentView添加到当前view
+     * 把需要悬浮的view添加到当前view
      */
-    private void addContentViewInternal()
+    private void addFloatViewInternal()
     {
-        final View view = getContentView();
+        final View view = getFloatView();
         if (view == null)
         {
             return;
@@ -114,15 +114,15 @@ public class SDFloatView extends FrameLayout
 
         final FrameLayout.LayoutParams params = generateDefaultLayoutParams();
         view.setLayoutParams(params);
-        onContentViewAdd(view);
+        onFloatViewAdd(view);
     }
 
     /**
-     * contentview被添加到当前view
+     * 需要悬浮的view被添加到当前view
      *
      * @param view
      */
-    protected void onContentViewAdd(View view)
+    protected void onFloatViewAdd(View view)
     {
         addView(view, 0);
     }
@@ -136,7 +136,7 @@ public class SDFloatView extends FrameLayout
     {
         if (add)
         {
-            addContentViewInternal();
+            addFloatViewInternal();
             SDWindowManager.getInstance().addView(this, getWindowParams());
         } else
         {
@@ -185,7 +185,7 @@ public class SDFloatView extends FrameLayout
 
     private boolean dontProcessTouchEvent()
     {
-        return (!mIsDraggable || getContentView() == null || getContentView().getParent() != this);
+        return (!mIsDraggable || getFloatView() == null || getFloatView().getParent() != this);
     }
 
     private boolean canDrag()
@@ -196,25 +196,25 @@ public class SDFloatView extends FrameLayout
         switch (mTouchHelper.getDirection())
         {
             case MoveLeft:
-                if (SDTouchHelper.isScrollToRight(getContentView()))
+                if (SDTouchHelper.isScrollToRight(getFloatView()))
                 {
                     result = true;
                 }
                 break;
             case MoveTop:
-                if (SDTouchHelper.isScrollToBottom(getContentView()))
+                if (SDTouchHelper.isScrollToBottom(getFloatView()))
                 {
                     result = true;
                 }
                 break;
             case MoveRight:
-                if (SDTouchHelper.isScrollToLeft(getContentView()))
+                if (SDTouchHelper.isScrollToLeft(getFloatView()))
                 {
                     result = true;
                 }
                 break;
             case MoveBottom:
-                if (SDTouchHelper.isScrollToTop(getContentView()))
+                if (SDTouchHelper.isScrollToTop(getFloatView()))
                 {
                     result = true;
                 }
@@ -267,8 +267,8 @@ public class SDFloatView extends FrameLayout
 
                     final int screenWidth = getResources().getDisplayMetrics().widthPixels;
                     final int screenHeight = getResources().getDisplayMetrics().heightPixels;
-                    final int maxX = screenWidth - getContentView().getWidth();
-                    final int maxY = screenHeight - getContentView().getHeight();
+                    final int maxX = screenWidth - getFloatView().getWidth();
+                    final int maxY = screenHeight - getFloatView().getHeight();
 
                     dx = mTouchHelper.getLegalDeltaX(getWindowParams().x, 0, maxX, dx);
                     dy = mTouchHelper.getLegalDeltaY(getWindowParams().y, 0, maxY, dy);

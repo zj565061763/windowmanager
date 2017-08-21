@@ -29,10 +29,10 @@ public class MainActivity extends AppCompatActivity
         });
 
         mFloatView = new SDFloatView(this);
-        mFloatView.setContentView(findViewById(R.id.scrollView)); //设置要悬浮的view
+        mFloatView.setFloatView(findViewById(R.id.scrollView)); //设置要悬浮的view
 
         mNewActivityFloatView = new SDFloatView(this);
-        mNewActivityFloatView.setContentView(findViewById(R.id.btn_new_activity_float)); //设置要悬浮的view
+        mNewActivityFloatView.setFloatView(findViewById(R.id.btn_new_activity_float)); //设置要悬浮的view
     }
 
     public void onClickAddToWindow(View view)
@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity
 
     public void onClickRestore(View view)
     {
-        mFloatView.restoreContentView(); //还原到原xml布局
+        mFloatView.restoreFloatView(); //还原到原xml布局
     }
 
     public void onClickNewActivity(View view)
@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity
     protected void onResume()
     {
         super.onResume();
-        mNewActivityFloatView.restoreContentView(); //新界面回来的时候还原
+        mNewActivityFloatView.restoreFloatView(); //新界面回来的时候还原
     }
 
     @Override
@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity
     protected void onDestroy()
     {
         super.onDestroy();
-        mFloatView.setContentView(null);
-        mNewActivityFloatView.setContentView(null);
+        mFloatView.setFloatView(null);
+        mNewActivityFloatView.setFloatView(null);
     }
 }

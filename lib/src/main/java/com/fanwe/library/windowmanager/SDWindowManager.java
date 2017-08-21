@@ -2,6 +2,7 @@ package com.fanwe.library.windowmanager;
 
 import android.content.Context;
 import android.graphics.PixelFormat;
+import android.os.Build;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -90,7 +91,13 @@ public class SDWindowManager
         params.width = WindowManager.LayoutParams.WRAP_CONTENT;
         params.height = WindowManager.LayoutParams.WRAP_CONTENT;
 
-        params.type = WindowManager.LayoutParams.TYPE_TOAST;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1)
+        {
+            params.type = WindowManager.LayoutParams.TYPE_PHONE;
+        } else
+        {
+            params.type = WindowManager.LayoutParams.TYPE_TOAST;
+        }
 
         params.gravity = Gravity.LEFT | Gravity.TOP;
         params.format = PixelFormat.TRANSLUCENT;

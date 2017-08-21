@@ -1,12 +1,15 @@
 # WindowManager
 对实现悬浮View进行了封装，可以很方便的实现View悬浮在Window上面，有的机子需要有悬浮窗权限
 
+## Gradle
+`compile 'com.fanwe.android:windowmanager:1.0.1'`
+
 ## 效果图
 ![](http://thumbsnap.com/i/NWunPUJZ.gif?0818)
 
 ## 使用方法
 ```java
-SDDraggableFloatView floatView = new SDDraggableFloatView(context);
+SDFloatView floatView = new SDFloatView(context);
 floatView.setContentView(btn); //设置要悬浮的view
 floatView.addToWindow(true); //true-添加到Window，false-从Window移除
 floatView.restoreContentView(); //还原到原xml布局

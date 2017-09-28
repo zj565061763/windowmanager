@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
 
-import com.fanwe.library.windowmanager.SDFloatView;
+import com.fanwe.lib.windowmanager.SDFloatView;
 
 
 public class MainActivity extends AppCompatActivity

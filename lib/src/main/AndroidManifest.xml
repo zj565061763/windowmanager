@@ -1,4 +1,4 @@
-<manifest package="com.fanwe.library.windowmanager"
+<manifest package="com.fanwe.lib.windowmanager"
 
           xmlns:android="http://schemas.android.com/apk/res/android"
 >

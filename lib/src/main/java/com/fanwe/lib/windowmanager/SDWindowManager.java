@@ -103,12 +103,13 @@ public class SDWindowManager
         params.width = WindowManager.LayoutParams.WRAP_CONTENT;
         params.height = WindowManager.LayoutParams.WRAP_CONTENT;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1)
-        {
-            params.type = WindowManager.LayoutParams.TYPE_PHONE;
-        } else
+        int sdkInt = Build.VERSION.SDK_INT;
+        if (sdkInt >= Build.VERSION_CODES.KITKAT && sdkInt <= Build.VERSION_CODES.N)
         {
             params.type = WindowManager.LayoutParams.TYPE_TOAST;
+        } else
+        {
+            params.type = WindowManager.LayoutParams.TYPE_PHONE;
         }
 
         params.gravity = Gravity.LEFT | Gravity.TOP;

@@ -12,6 +12,6 @@
 SDFloatView floatView = new SDFloatView(context);
 floatView.setContentView(btn); //设置要悬浮的view
 floatView.addToWindow(true); //true-添加到Window，false-从Window移除
-floatView.restoreFloatView(); //还原到原xml布局
+floatView.restoreContentView(); //还原到原xml布局
 //更多方法请参考源码...
 ```

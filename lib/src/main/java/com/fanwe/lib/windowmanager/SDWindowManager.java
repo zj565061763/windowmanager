@@ -130,11 +130,11 @@ public class SDWindowManager
      */
     public void addView(View view, ViewGroup.LayoutParams params)
     {
-        init(view);
         if (view == null)
         {
             return;
         }
+        init(view);
         if (containsView(view))
         {
             return;
@@ -161,6 +161,7 @@ public class SDWindowManager
         @Override
         public void onViewDetachedFromWindow(View v)
         {
+            v.removeOnAttachStateChangeListener(this);
             mMapView.remove(v);
         }
     };

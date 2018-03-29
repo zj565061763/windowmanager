@@ -110,9 +110,26 @@ public class FFloatView extends FrameLayout
     }
 
     /**
+     * 是否添加到Window
+     *
+     * @param add
+     */
+    public void addToWindow(boolean add)
+    {
+        if (add)
+        {
+            addContentViewToFloatView();
+            FWindowManager.getInstance().addView(this, getWindowParams());
+        } else
+        {
+            FWindowManager.getInstance().removeViewImmediate(this);
+        }
+    }
+
+    /**
      * 把需要悬浮的view添加到当前view
      */
-    private void addContentViewInternal()
+    private void addContentViewToFloatView()
     {
         final View view = getContentView();
         if (view == null)
@@ -138,23 +155,6 @@ public class FFloatView extends FrameLayout
     protected void onContentViewAdd(View view)
     {
         addView(view, 0);
-    }
-
-    /**
-     * 是否添加到Window
-     *
-     * @param add
-     */
-    public void addToWindow(boolean add)
-    {
-        if (add)
-        {
-            addContentViewInternal();
-            FWindowManager.getInstance().addView(this, getWindowParams());
-        } else
-        {
-            FWindowManager.getInstance().removeViewImmediate(this);
-        }
     }
 
     /**

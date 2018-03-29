@@ -206,7 +206,7 @@ public class FFloatView extends FrameLayout
         return mIsDraggable;
     }
 
-    private SDTouchHelper mTouchHelper = new SDTouchHelper();
+    private FTouchHelper mTouchHelper = new FTouchHelper();
 
     private boolean dontProcessTouchEvent()
     {
@@ -221,25 +221,25 @@ public class FFloatView extends FrameLayout
         switch (mTouchHelper.getDirection())
         {
             case MoveLeft:
-                if (SDTouchHelper.isScrollToRight(getContentView()))
+                if (FTouchHelper.isScrollToRight(getContentView()))
                 {
                     result = true;
                 }
                 break;
             case MoveTop:
-                if (SDTouchHelper.isScrollToBottom(getContentView()))
+                if (FTouchHelper.isScrollToBottom(getContentView()))
                 {
                     result = true;
                 }
                 break;
             case MoveRight:
-                if (SDTouchHelper.isScrollToLeft(getContentView()))
+                if (FTouchHelper.isScrollToLeft(getContentView()))
                 {
                     result = true;
                 }
                 break;
             case MoveBottom:
-                if (SDTouchHelper.isScrollToTop(getContentView()))
+                if (FTouchHelper.isScrollToTop(getContentView()))
                 {
                     result = true;
                 }
@@ -287,8 +287,8 @@ public class FFloatView extends FrameLayout
             case MotionEvent.ACTION_MOVE:
                 if (mTouchHelper.isNeedCosume())
                 {
-                    int dx = (int) mTouchHelper.getDeltaXFrom(SDTouchHelper.EVENT_LAST);
-                    int dy = (int) mTouchHelper.getDeltaYFrom(SDTouchHelper.EVENT_LAST);
+                    int dx = (int) mTouchHelper.getDeltaXFrom(FTouchHelper.EVENT_LAST);
+                    int dy = (int) mTouchHelper.getDeltaYFrom(FTouchHelper.EVENT_LAST);
 
                     final int screenWidth = getResources().getDisplayMetrics().widthPixels;
                     final int screenHeight = getResources().getDisplayMetrics().heightPixels;

@@ -18,6 +18,7 @@ package com.fanwe.lib.windowmanager;
 import android.content.Context;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
@@ -37,7 +38,17 @@ public class FFloatView extends FrameLayout
     private WindowManager.LayoutParams mWindowParams;
 
     /**
-     * 设置要悬浮的view
+     * 返回设置的内容view
+     *
+     * @return
+     */
+    public View getContentView()
+    {
+        return mContentView;
+    }
+
+    /**
+     * 设置内容view给当前悬浮view
      *
      * @param view
      */
@@ -69,7 +80,7 @@ public class FFloatView extends FrameLayout
     }
 
     /**
-     * 还原悬浮view到原parent
+     * 还原内容view到原父容器
      */
     public void restoreContentView()
     {
@@ -78,13 +89,14 @@ public class FFloatView extends FrameLayout
     }
 
     /**
-     * 返回悬浮的内容view
+     * 还原内容View到某个容器
      *
-     * @return
+     * @param viewGroup
      */
-    public View getContentView()
+    public void restoreContentViewTo(ViewGroup viewGroup)
     {
-        return mContentView;
+        addToWindow(false);
+        mViewStoreHelper.restoreTo(viewGroup);
     }
 
     /**
@@ -102,7 +114,7 @@ public class FFloatView extends FrameLayout
     }
 
     /**
-     * 更新View布局
+     * 更新悬浮view布局
      */
     public void updateViewLayout()
     {
@@ -110,7 +122,7 @@ public class FFloatView extends FrameLayout
     }
 
     /**
-     * 是否添加到Window
+     * 把悬浮view添加到window或者移除
      *
      * @param add
      */
@@ -127,7 +139,7 @@ public class FFloatView extends FrameLayout
     }
 
     /**
-     * 把需要悬浮的view添加到当前view
+     * 把内容view添加到当前悬浮view
      */
     private void addContentViewToFloatView()
     {
@@ -148,7 +160,7 @@ public class FFloatView extends FrameLayout
     }
 
     /**
-     * 需要悬浮的view被添加到当前view
+     * 内容view被添加到当前悬浮view
      *
      * @param view
      */
@@ -158,7 +170,7 @@ public class FFloatView extends FrameLayout
     }
 
     /**
-     * 是否已经被添加到Window
+     * 悬浮view是否已经被添加到window
      *
      * @return
      */

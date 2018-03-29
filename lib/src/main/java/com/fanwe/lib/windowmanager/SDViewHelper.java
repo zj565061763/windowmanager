@@ -43,10 +43,10 @@ class SDViewHelper
         {
             mParams = view.getLayoutParams();
 
-            final ViewParent viewParent = view.getParent();
-            if (viewParent instanceof ViewGroup)
+            final ViewParent parent = view.getParent();
+            if (parent != null && parent instanceof ViewGroup)
             {
-                final ViewGroup viewGroup = (ViewGroup) viewParent;
+                final ViewGroup viewGroup = (ViewGroup) parent;
                 setParent(viewGroup);
                 mIndex = viewGroup.indexOfChild(view);
             }
@@ -104,27 +104,7 @@ class SDViewHelper
         mIndex = -1;
     }
 
-    /**
-     * 把View从它的Parent上移除
-     *
-     * @param view
-     */
-    public static void removeViewFromParent(View view)
-    {
-        if (view == null)
-        {
-            return;
-        }
-        final ViewParent viewParent = view.getParent();
-        if (!(viewParent instanceof ViewGroup))
-        {
-            return;
-        }
-        ViewGroup viewGroup = (ViewGroup) viewParent;
-        viewGroup.removeView(view);
-    }
-
-    private void setParent(ViewGroup viewGroup)
+    public void setParent(ViewGroup viewGroup)
     {
         if (viewGroup != null)
         {
@@ -142,11 +122,7 @@ class SDViewHelper
      */
     public ViewGroup getParent()
     {
-        if (mParent != null)
-        {
-            return mParent.get();
-        }
-        return null;
+        return mParent == null ? null : mParent.get();
     }
 
     /**
@@ -167,5 +143,25 @@ class SDViewHelper
     public int getIndex()
     {
         return mIndex;
+    }
+
+    /**
+     * 把View从它的Parent上移除
+     *
+     * @param view
+     */
+    public static void removeViewFromParent(View view)
+    {
+        if (view == null)
+        {
+            return;
+        }
+
+        final ViewParent parent = view.getParent();
+        if (parent != null && parent instanceof ViewGroup)
+        {
+            ViewGroup viewGroup = (ViewGroup) parent;
+            viewGroup.removeView(view);
+        }
     }
 }

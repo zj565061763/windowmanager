@@ -97,7 +97,6 @@ public class FFloatView extends FrameLayout
      */
     public void restoreContentView()
     {
-        addToWindow(false);
         mViewStoreHelper.restore();
     }
 
@@ -108,7 +107,6 @@ public class FFloatView extends FrameLayout
      */
     public void restoreContentViewTo(ViewGroup viewGroup)
     {
-        addToWindow(false);
         mViewStoreHelper.restoreTo(viewGroup);
     }
 
@@ -179,6 +177,16 @@ public class FFloatView extends FrameLayout
     public boolean isAddedToWindow()
     {
         return FWindowManager.getInstance().containsView(this);
+    }
+
+    @Override
+    public void onViewRemoved(View child)
+    {
+        super.onViewRemoved(child);
+        if (getChildCount() <= 0)
+        {
+            addToWindow(false);
+        }
     }
 
     //----------drag logic start----------

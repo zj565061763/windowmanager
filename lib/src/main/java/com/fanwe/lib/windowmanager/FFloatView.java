@@ -71,8 +71,6 @@ public class FFloatView extends FrameLayout
             return;
         }
 
-        addToWindow(false);
-
         if (mContentView != null)
         {
             if (mContentView.getParent() == this)

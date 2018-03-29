@@ -16,6 +16,7 @@
 package com.fanwe.lib.windowmanager;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +46,17 @@ public class FFloatView extends FrameLayout
     public View getContentView()
     {
         return mContentView;
+    }
+
+    /**
+     * 设置内容view给当前悬浮view
+     *
+     * @param layoutId 内容view布局id
+     */
+    public void setContentView(int layoutId)
+    {
+        final View view = LayoutInflater.from(getContext()).inflate(layoutId, this, false);
+        setContentView(view);
     }
 
     /**

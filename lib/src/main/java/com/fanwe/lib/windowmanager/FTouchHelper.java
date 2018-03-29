@@ -25,7 +25,7 @@ import android.view.ViewParent;
  */
 class FTouchHelper
 {
-    private static final String TAG = "FTouchHelper";
+    private static final String TAG = FTouchHelper.class.getSimpleName();
 
     private boolean mIsDebug;
 
@@ -46,6 +46,8 @@ class FTouchHelper
      * onTouchEvent方法是否需要消费事件
      */
     private boolean mIsNeedCosume = false;
+
+    private boolean mReleaseOnActionUp = true;
 
     private float mCurrentX;
     private float mCurrentY;
@@ -96,6 +98,12 @@ class FTouchHelper
             case MotionEvent.ACTION_UP:
                 mUpX = mCurrentX;
                 mUpY = mCurrentY;
+
+                if (mReleaseOnActionUp)
+                {
+                    setNeedIntercept(false);
+                    setNeedCosume(false);
+                }
                 break;
             default:
                 break;
@@ -146,6 +154,11 @@ class FTouchHelper
     public boolean isNeedCosume()
     {
         return mIsNeedCosume;
+    }
+
+    public void setReleaseOnActionUp(boolean releaseOnActionUp)
+    {
+        mReleaseOnActionUp = releaseOnActionUp;
     }
 
     public float getDownX()

@@ -9,7 +9,7 @@
 
 ## 使用方法
 ```java
-SDFloatView floatView = new SDFloatView(context);
+FFloatView floatView = new FFloatView(context);
 floatView.setContentView(btn); //设置要悬浮的view
 floatView.addToWindow(true); //true-添加到Window，false-从Window移除
 floatView.restoreContentView(); //还原到原xml布局

@@ -22,10 +22,11 @@ import android.view.ViewParent;
 import java.lang.ref.WeakReference;
 
 /**
- * Created by Administrator on 2017/8/18.
+ * Created by zhengjun on 2017/8/18.
  */
-class SDViewHelper
+class ViewStoreHelper
 {
+    private WeakReference<View> mView;
     private WeakReference<ViewGroup> mParent;
     private ViewGroup.LayoutParams mParams;
     private int mIndex = -1;
@@ -41,105 +42,76 @@ class SDViewHelper
 
         if (view != null)
         {
-            mParams = view.getLayoutParams();
+            mView = new WeakReference<>(view);
 
+            mParams = view.getLayoutParams();
             final ViewParent parent = view.getParent();
             if (parent != null && parent instanceof ViewGroup)
             {
                 final ViewGroup viewGroup = (ViewGroup) parent;
-                setParent(viewGroup);
+
+                mParent = new WeakReference<>(viewGroup);
                 mIndex = viewGroup.indexOfChild(view);
             }
         }
     }
 
     /**
-     * 是否可以还原view
-     *
-     * @param view
-     * @return
+     * 把View还原到原先的父容器
      */
-    public boolean canRestore(View view)
+    public void restore()
     {
-        if (view == null)
-        {
-            return false;
-        }
-        final ViewGroup parent = getParent();
-        if (parent == null)
-        {
-            return false;
-        }
-        if (view.getParent() == parent)
-        {
-            return false;
-        }
-        return true;
+        restoreTo(getParent());
     }
 
     /**
-     * 把view还原到原来的parent
+     * 把View还原到某个容器
      *
-     * @param view
-     * @return
+     * @param viewGroup
      */
-    public void restore(View view)
+    public void restoreTo(ViewGroup viewGroup)
     {
-        if (!canRestore(view))
+        if (viewGroup == null)
+        {
+            return;
+        }
+        final View view = getView();
+        if (view == null)
+        {
+            return;
+        }
+        if (view.getParent() == viewGroup)
         {
             return;
         }
 
         removeViewFromParent(view);
-        getParent().addView(view, mIndex, mParams);
+        viewGroup.addView(view, mIndex, mParams);
     }
 
-    /**
-     * 重置，清除保存的数据
-     */
-    public void reset()
+    private void reset()
     {
-        setParent(null);
+        mView = null;
+        mParent = null;
         mParams = null;
         mIndex = -1;
     }
 
-    public void setParent(ViewGroup viewGroup)
+    public View getView()
     {
-        if (viewGroup != null)
-        {
-            mParent = new WeakReference<>(viewGroup);
-        } else
-        {
-            mParent = null;
-        }
+        return mView == null ? null : mView.get();
     }
 
-    /**
-     * 返回保存的Parent
-     *
-     * @return
-     */
     public ViewGroup getParent()
     {
         return mParent == null ? null : mParent.get();
     }
 
-    /**
-     * 返回保存的LayoutParams
-     *
-     * @return
-     */
     public ViewGroup.LayoutParams getParams()
     {
         return mParams;
     }
 
-    /**
-     * 返回保存的index
-     *
-     * @return
-     */
     public int getIndex()
     {
         return mIndex;

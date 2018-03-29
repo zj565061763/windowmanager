@@ -32,7 +32,7 @@ public class SDFloatView extends FrameLayout
     }
 
     private View mContentView;
-    private SDViewHelper mViewHelper = new SDViewHelper();
+    private final ViewStoreHelper mViewStoreHelper = new ViewStoreHelper();
 
     private WindowManager.LayoutParams mWindowParams;
 
@@ -54,17 +54,17 @@ public class SDFloatView extends FrameLayout
             if (mContentView.getParent() == this)
             {
                 removeView(mContentView);
-                mContentView.setLayoutParams(mViewHelper.getParams());
+                mContentView.setLayoutParams(mViewStoreHelper.getParams());
             }
         }
 
         mContentView = view;
 
-        mViewHelper.save(view);
-        if (mViewHelper.getParams() != null)
+        mViewStoreHelper.save(view);
+        if (mViewStoreHelper.getParams() != null)
         {
-            getWindowParams().width = mViewHelper.getParams().width;
-            getWindowParams().height = mViewHelper.getParams().height;
+            getWindowParams().width = mViewStoreHelper.getParams().width;
+            getWindowParams().height = mViewStoreHelper.getParams().height;
         }
     }
 
@@ -74,7 +74,7 @@ public class SDFloatView extends FrameLayout
     public void restoreContentView()
     {
         addToWindow(false);
-        mViewHelper.restore(mContentView);
+        mViewStoreHelper.restore();
     }
 
     /**
@@ -123,7 +123,7 @@ public class SDFloatView extends FrameLayout
         {
             return;
         }
-        SDViewHelper.removeViewFromParent(view);
+        ViewStoreHelper.removeViewFromParent(view);
 
         final FrameLayout.LayoutParams params = generateDefaultLayoutParams();
         view.setLayoutParams(params);

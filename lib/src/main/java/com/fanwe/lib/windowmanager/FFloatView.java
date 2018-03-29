@@ -58,6 +58,7 @@ public class FFloatView extends FrameLayout
         {
             return;
         }
+
         addToWindow(false);
 
         if (mContentView != null)
@@ -70,8 +71,8 @@ public class FFloatView extends FrameLayout
         }
 
         mContentView = view;
-
         mViewStoreHelper.save(view);
+
         if (mViewStoreHelper.getParams() != null)
         {
             getWindowParams().width = mViewStoreHelper.getParams().width;
@@ -152,21 +153,10 @@ public class FFloatView extends FrameLayout
         {
             return;
         }
+
         ViewStoreHelper.removeViewFromParent(view);
-
-        final FrameLayout.LayoutParams params = generateDefaultLayoutParams();
-        view.setLayoutParams(params);
-        onContentViewAdd(view);
-    }
-
-    /**
-     * 内容view被添加到当前悬浮view
-     *
-     * @param view
-     */
-    protected void onContentViewAdd(View view)
-    {
-        addView(view, 0);
+        removeAllViews();
+        addView(view);
     }
 
     /**

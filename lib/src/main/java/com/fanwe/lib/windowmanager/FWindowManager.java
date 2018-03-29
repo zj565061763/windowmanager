@@ -67,7 +67,7 @@ public class FWindowManager
         }
     }
 
-    private void init(View view)
+    private void initContextIfNeed(View view)
     {
         if (view == null)
         {
@@ -85,7 +85,7 @@ public class FWindowManager
     {
         if (mContext == null)
         {
-            throw new NullPointerException("mContext is null, you must call init(context) before this");
+            throw new NullPointerException("mContext is null, you must call init(Context) before this");
         }
     }
 
@@ -130,20 +130,16 @@ public class FWindowManager
      */
     public void addView(View view, ViewGroup.LayoutParams params)
     {
-        if (view == null)
-        {
-            return;
-        }
-        init(view);
+        initContextIfNeed(view);
         if (containsView(view))
         {
             return;
         }
+
         if (params == null)
         {
             params = newLayoutParams();
         }
-
         getWindowManager().addView(view, params);
 
         view.removeOnAttachStateChangeListener(mInternalOnAttachStateChangeListener);
@@ -174,7 +170,7 @@ public class FWindowManager
      */
     public void updateViewLayout(View view, ViewGroup.LayoutParams params)
     {
-        init(view);
+        initContextIfNeed(view);
         if (params == null)
         {
             return;
@@ -193,7 +189,7 @@ public class FWindowManager
      */
     public void removeView(View view)
     {
-        init(view);
+        initContextIfNeed(view);
 
         if (containsView(view))
         {
@@ -208,7 +204,7 @@ public class FWindowManager
      */
     public void removeViewImmediate(View view)
     {
-        init(view);
+        initContextIfNeed(view);
 
         if (containsView(view))
         {
@@ -279,5 +275,4 @@ public class FWindowManager
     {
         return mMapView.containsKey(view);
     }
-
 }

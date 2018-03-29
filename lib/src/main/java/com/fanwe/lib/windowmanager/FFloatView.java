@@ -24,9 +24,9 @@ import android.widget.FrameLayout;
 /**
  * 悬浮view
  */
-public class SDFloatView extends FrameLayout
+public class FFloatView extends FrameLayout
 {
-    public SDFloatView(Context context)
+    public FFloatView(Context context)
     {
         super(context.getApplicationContext());
     }
@@ -96,7 +96,7 @@ public class SDFloatView extends FrameLayout
     {
         if (mWindowParams == null)
         {
-            mWindowParams = SDWindowManager.newLayoutParams();
+            mWindowParams = FWindowManager.newLayoutParams();
         }
         return mWindowParams;
     }
@@ -106,7 +106,7 @@ public class SDFloatView extends FrameLayout
      */
     public void updateViewLayout()
     {
-        SDWindowManager.getInstance().updateViewLayout(this, getWindowParams());
+        FWindowManager.getInstance().updateViewLayout(this, getWindowParams());
     }
 
     /**
@@ -150,10 +150,10 @@ public class SDFloatView extends FrameLayout
         if (add)
         {
             addContentViewInternal();
-            SDWindowManager.getInstance().addView(this, getWindowParams());
+            FWindowManager.getInstance().addView(this, getWindowParams());
         } else
         {
-            SDWindowManager.getInstance().removeViewImmediate(this);
+            FWindowManager.getInstance().removeViewImmediate(this);
         }
     }
 
@@ -164,7 +164,7 @@ public class SDFloatView extends FrameLayout
      */
     public boolean isAddedToWindow()
     {
-        return SDWindowManager.getInstance().containsView(this);
+        return FWindowManager.getInstance().containsView(this);
     }
 
     //----------drag logic start----------

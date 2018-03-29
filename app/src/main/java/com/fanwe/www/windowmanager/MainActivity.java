@@ -6,13 +6,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
 
-import com.fanwe.lib.windowmanager.SDFloatView;
+import com.fanwe.lib.windowmanager.FFloatView;
 
 
 public class MainActivity extends AppCompatActivity
 {
-    private SDFloatView mFloatView;
-    private SDFloatView mNewActivityFloatView;
+    private FFloatView mFloatView;
+    private FFloatView mNewActivityFloatView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -28,10 +28,10 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        mFloatView = new SDFloatView(this);
+        mFloatView = new FFloatView(this);
         mFloatView.setContentView(findViewById(R.id.scrollView)); //设置要悬浮的view
 
-        mNewActivityFloatView = new SDFloatView(this);
+        mNewActivityFloatView = new FFloatView(this);
         mNewActivityFloatView.setContentView(findViewById(R.id.btn_new_activity_float)); //设置要悬浮的view
     }
 

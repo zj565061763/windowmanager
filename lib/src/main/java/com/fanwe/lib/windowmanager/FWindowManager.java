@@ -28,26 +28,26 @@ import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-public class SDWindowManager
+public class FWindowManager
 {
-    private static SDWindowManager sInstance;
+    private static FWindowManager sInstance;
 
     private Context mContext;
-    private WeakHashMap<View, Integer> mMapView = new WeakHashMap<>();
+    private Map<View, Integer> mMapView = new WeakHashMap<>();
 
-    private SDWindowManager()
+    private FWindowManager()
     {
     }
 
-    public static SDWindowManager getInstance()
+    public static FWindowManager getInstance()
     {
         if (sInstance == null)
         {
-            synchronized (SDWindowManager.class)
+            synchronized (FWindowManager.class)
             {
                 if (sInstance == null)
                 {
-                    sInstance = new SDWindowManager();
+                    sInstance = new FWindowManager();
                 }
             }
         }
@@ -223,13 +223,10 @@ public class SDWindowManager
      */
     public void removeView(Class clazz)
     {
-        List<View> list = getView(clazz);
-        if (list != null && !list.isEmpty())
+        final List<View> list = getView(clazz);
+        for (View item : list)
         {
-            for (View item : list)
-            {
-                removeView(item);
-            }
+            getWindowManager().removeView(item);
         }
     }
 
@@ -241,45 +238,16 @@ public class SDWindowManager
      */
     public List<View> getView(Class clazz)
     {
-        if (clazz == null || mMapView.isEmpty())
-        {
-            return null;
-        }
-
-        List<View> list = new ArrayList<>();
+        final List<View> list = new ArrayList<>();
         for (Map.Entry<View, Integer> item : mMapView.entrySet())
         {
-            View view = item.getKey();
-            if (view != null && view.getClass() == clazz)
+            final View view = item.getKey();
+            if (view.getClass() == clazz)
             {
                 list.add(view);
             }
         }
         return list;
-    }
-
-    /**
-     * 返回等于指定class的第一个view
-     *
-     * @param clazz
-     * @return
-     */
-    public View getFirstView(Class clazz)
-    {
-        if (clazz == null || mMapView.isEmpty())
-        {
-            return null;
-        }
-
-        for (Map.Entry<View, Integer> item : mMapView.entrySet())
-        {
-            View view = item.getKey();
-            if (view != null && view.getClass() == clazz)
-            {
-                return view;
-            }
-        }
-        return null;
     }
 
     /**
@@ -290,7 +258,15 @@ public class SDWindowManager
      */
     public boolean containsView(Class clazz)
     {
-        return getFirstView(clazz) != null;
+        for (Map.Entry<View, Integer> item : mMapView.entrySet())
+        {
+            final View view = item.getKey();
+            if (view.getClass() == clazz)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -301,11 +277,6 @@ public class SDWindowManager
      */
     public boolean containsView(View view)
     {
-        if (view == null || mMapView.isEmpty())
-        {
-            return false;
-        }
-
         return mMapView.containsKey(view);
     }
 

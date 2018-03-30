@@ -83,11 +83,26 @@ public class FFloatView extends FrameLayout
         mContentView = view;
         mViewStoreHelper.save(view);
 
+        if (mContentView != null)
+        {
+            onInitContentView(mContentView);
+        }
+
         if (mViewStoreHelper.getParams() != null)
         {
             getWindowParams().width = mViewStoreHelper.getParams().width;
             getWindowParams().height = mViewStoreHelper.getParams().height;
         }
+    }
+
+    /**
+     * {@link #setContentView(View)}和{@link #setContentView(int)}之后会触发此方法，可用来初始化内容view
+     *
+     * @param contentView
+     */
+    protected void onInitContentView(View contentView)
+    {
+
     }
 
     /**

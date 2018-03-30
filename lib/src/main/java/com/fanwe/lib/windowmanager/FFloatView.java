@@ -81,13 +81,13 @@ public class FFloatView extends FrameLayout
         }
 
         mContentView = view;
-        mViewStoreHelper.save(view);
 
         if (mContentView != null)
         {
             onInitContentView(mContentView);
         }
 
+        mViewStoreHelper.save(view);
         if (mViewStoreHelper.getParams() != null)
         {
             getWindowParams().width = mViewStoreHelper.getParams().width;

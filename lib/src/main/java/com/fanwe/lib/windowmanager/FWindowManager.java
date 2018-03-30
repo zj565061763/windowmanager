@@ -213,6 +213,17 @@ public class FWindowManager
     }
 
     /**
+     * 是否有指定的view
+     *
+     * @param view
+     * @return
+     */
+    public boolean containsView(View view)
+    {
+        return mMapView.containsKey(view);
+    }
+
+    /**
      * 移除指定class的所有view
      *
      * @param clazz
@@ -232,15 +243,15 @@ public class FWindowManager
      * @param clazz
      * @return
      */
-    public List<View> getView(Class clazz)
+    public <T extends View> List<T> getView(Class<T> clazz)
     {
-        final List<View> list = new ArrayList<>();
+        final List<T> list = new ArrayList<>();
         for (Map.Entry<View, Integer> item : mMapView.entrySet())
         {
             final View view = item.getKey();
             if (view.getClass() == clazz)
             {
-                list.add(view);
+                list.add((T) view);
             }
         }
         return list;
@@ -263,16 +274,5 @@ public class FWindowManager
             }
         }
         return false;
-    }
-
-    /**
-     * 是否有指定的view
-     *
-     * @param view
-     * @return
-     */
-    public boolean containsView(View view)
-    {
-        return mMapView.containsKey(view);
     }
 }

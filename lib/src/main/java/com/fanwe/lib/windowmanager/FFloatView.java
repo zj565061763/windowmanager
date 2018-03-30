@@ -81,18 +81,13 @@ public class FFloatView extends FrameLayout
         }
 
         mContentView = view;
-
         if (mContentView != null)
         {
             onInitContentView(mContentView);
         }
 
         mViewStoreHelper.save(view);
-        if (mViewStoreHelper.getParams() != null)
-        {
-            getWindowParams().width = mViewStoreHelper.getParams().width;
-            getWindowParams().height = mViewStoreHelper.getParams().height;
-        }
+        synchronizeContentViewSizeToFloatView();
     }
 
     /**
@@ -138,9 +133,29 @@ public class FFloatView extends FrameLayout
     }
 
     /**
+     * 把内容view的大小同步到悬浮view
+     */
+    public void synchronizeContentViewSizeToFloatView()
+    {
+        final View view = getContentView();
+        if (view == null)
+        {
+            return;
+        }
+        final ViewGroup.LayoutParams params = view.getLayoutParams();
+        if (params == null)
+        {
+            return;
+        }
+        getWindowParams().width = params.width;
+        getWindowParams().height = params.height;
+        updateFloatViewLayout();
+    }
+
+    /**
      * 更新悬浮view布局
      */
-    public void updateViewLayout()
+    public void updateFloatViewLayout()
     {
         FWindowManager.getInstance().updateViewLayout(this, getWindowParams());
     }
@@ -325,7 +340,7 @@ public class FFloatView extends FrameLayout
                     {
                         getWindowParams().x += dx;
                         getWindowParams().y += dy;
-                        updateViewLayout();
+                        updateFloatViewLayout();
                     }
                 } else
                 {

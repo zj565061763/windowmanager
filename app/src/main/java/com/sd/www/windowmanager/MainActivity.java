@@ -1,4 +1,4 @@
-package com.fanwe.www.windowmanager;
+package com.sd.www.windowmanager;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
 
-import com.fanwe.lib.windowmanager.FFloatView;
+import com.sd.lib.windowmanager.FFloatView;
 
 
 public class MainActivity extends AppCompatActivity

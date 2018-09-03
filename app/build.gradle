@@ -1,9 +1,9 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 27
     defaultConfig {
-        applicationId "com.fanwe.www.windowmanager"
+        applicationId "com.sd.www.windowmanager"
         minSdkVersion 16
         targetSdkVersion 22
         versionCode 1
@@ -24,7 +24,7 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation project(':lib')
     implementation 'com.github.czy1121:settingscompat:1.1.4'
 }

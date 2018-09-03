@@ -1,4 +1,4 @@
-package com.fanwe.www.windowmanager;
+package com.sd.www.windowmanager;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

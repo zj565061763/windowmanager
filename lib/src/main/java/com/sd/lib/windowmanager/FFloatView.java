@@ -177,7 +177,7 @@ public class FFloatView extends FrameLayout
         super.onViewRemoved(child);
 
         if (mContentView == child)
-            setContentView(null);
+            mContentView = null;
 
         if (getChildCount() <= 0)
             addToWindow(false);
@@ -274,18 +274,17 @@ public class FFloatView extends FrameLayout
         if (ignoreTouchEvent())
             return false;
 
-        if (mTouchHelper.isNeedIntercept())
-        {
-            return true;
-        }
         mTouchHelper.processTouchEvent(ev);
         switch (ev.getAction())
         {
             case MotionEvent.ACTION_MOVE:
                 if (canDrag())
-                {
                     mTouchHelper.setNeedIntercept(true);
-                }
+                break;
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL:
+                mTouchHelper.setNeedIntercept(false);
+                mTouchHelper.setNeedCosume(false);
                 break;
         }
         return mTouchHelper.isNeedIntercept();
@@ -300,16 +299,16 @@ public class FFloatView extends FrameLayout
         mTouchHelper.processTouchEvent(event);
         switch (event.getAction())
         {
+            case MotionEvent.ACTION_DOWN:
+                return true;
             case MotionEvent.ACTION_MOVE:
                 if (mTouchHelper.isNeedCosume())
                 {
                     int dx = (int) mTouchHelper.getDeltaXFrom(FTouchHelper.EVENT_LAST);
                     int dy = (int) mTouchHelper.getDeltaYFrom(FTouchHelper.EVENT_LAST);
 
-                    final int screenWidth = getResources().getDisplayMetrics().widthPixels;
-                    final int screenHeight = getResources().getDisplayMetrics().heightPixels;
-                    final int maxX = screenWidth - getContentView().getWidth();
-                    final int maxY = screenHeight - getContentView().getHeight();
+                    final int maxX = getResources().getDisplayMetrics().widthPixels - getWidth();
+                    final int maxY = getResources().getDisplayMetrics().heightPixels - getHeight();
 
                     dx = mTouchHelper.getLegalDeltaX(getWindowParams().x, 0, maxX, dx);
                     dy = mTouchHelper.getLegalDeltaY(getWindowParams().y, 0, maxY, dy);
@@ -331,12 +330,11 @@ public class FFloatView extends FrameLayout
 
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
-
                 mTouchHelper.setNeedIntercept(false);
                 mTouchHelper.setNeedCosume(false);
                 break;
         }
-        return mTouchHelper.isNeedCosume() || event.getAction() == MotionEvent.ACTION_DOWN;
+        return mTouchHelper.isNeedCosume();
     }
 
     //----------drag logic end----------

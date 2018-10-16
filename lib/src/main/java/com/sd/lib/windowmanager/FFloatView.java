@@ -83,6 +83,8 @@ public class FFloatView extends FrameLayout
 
     /**
      * 还原内容view到原父容器
+     * <p>
+     * 如果还原成功，当前悬浮view会被移除，并且内容view会被置为null
      */
     public final void restoreContentView()
     {

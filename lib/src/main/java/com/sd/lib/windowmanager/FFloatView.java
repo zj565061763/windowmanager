@@ -1,6 +1,7 @@
 package com.sd.lib.windowmanager;
 
 import android.content.Context;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -182,6 +183,17 @@ public class FFloatView extends FrameLayout
             addToWindow(false);
     }
 
+    private static boolean isAttached(View view)
+    {
+        if (view == null)
+            return false;
+
+        if (Build.VERSION.SDK_INT >= 19)
+            return view.isAttachedToWindow();
+        else
+            return view.getWindowToken() != null;
+    }
+
     //----------drag logic start----------
 
     /**
@@ -211,9 +223,18 @@ public class FFloatView extends FrameLayout
 
     private final FTouchHelper mTouchHelper = new FTouchHelper();
 
-    private boolean dontProcessTouchEvent()
+    private boolean ignoreTouchEvent()
     {
-        return (!mIsDraggable || getContentView() == null || getContentView().getParent() != this);
+        if (getContentView() == null)
+            return true;
+
+        if (!mIsDraggable)
+            return true;
+
+        if (!isAttached(this))
+            return true;
+
+        return false;
     }
 
     private boolean canDrag()
@@ -225,27 +246,23 @@ public class FFloatView extends FrameLayout
         {
             case MoveLeft:
                 if (FTouchHelper.isScrollToRight(getContentView()))
-                {
                     result = true;
-                }
+
                 break;
             case MoveTop:
                 if (FTouchHelper.isScrollToBottom(getContentView()))
-                {
                     result = true;
-                }
+
                 break;
             case MoveRight:
                 if (FTouchHelper.isScrollToLeft(getContentView()))
-                {
                     result = true;
-                }
+
                 break;
             case MoveBottom:
                 if (FTouchHelper.isScrollToTop(getContentView()))
-                {
                     result = true;
-                }
+
                 break;
         }
         return result;
@@ -254,10 +271,8 @@ public class FFloatView extends FrameLayout
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev)
     {
-        if (dontProcessTouchEvent())
-        {
+        if (ignoreTouchEvent())
             return false;
-        }
 
         if (mTouchHelper.isNeedIntercept())
         {
@@ -279,10 +294,8 @@ public class FFloatView extends FrameLayout
     @Override
     public boolean onTouchEvent(MotionEvent event)
     {
-        if (dontProcessTouchEvent())
-        {
+        if (ignoreTouchEvent())
             return false;
-        }
 
         mTouchHelper.processTouchEvent(event);
         switch (event.getAction())

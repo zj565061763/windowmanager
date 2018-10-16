@@ -5,6 +5,7 @@ import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -222,6 +223,8 @@ public class FFloatView extends FrameLayout
     }
 
     private final FTouchHelper mTouchHelper = new FTouchHelper();
+    private boolean mInterceptTouchEvent;
+    private boolean mProcessTouchEvent;
 
     private boolean ignoreTouchEvent()
     {
@@ -239,79 +242,76 @@ public class FFloatView extends FrameLayout
 
     private boolean canDrag()
     {
-        boolean result = false;
+        final int touchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
+        if (!mTouchHelper.saveDirection(touchSlop))
+            return false;
 
-        mTouchHelper.saveDirection();
         switch (mTouchHelper.getDirection())
         {
             case MoveLeft:
                 if (FTouchHelper.isScrollToRight(getContentView()))
-                    result = true;
-
+                    return true;
                 break;
             case MoveTop:
                 if (FTouchHelper.isScrollToBottom(getContentView()))
-                    result = true;
-
+                    return true;
                 break;
             case MoveRight:
                 if (FTouchHelper.isScrollToLeft(getContentView()))
-                    result = true;
-
+                    return true;
                 break;
             case MoveBottom:
                 if (FTouchHelper.isScrollToTop(getContentView()))
-                    result = true;
-
+                    return true;
                 break;
         }
-        return result;
+
+        return false;
     }
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev)
     {
+        mTouchHelper.processTouchEvent(ev);
+
         if (ignoreTouchEvent())
             return false;
 
-        mTouchHelper.processTouchEvent(ev);
         switch (ev.getAction())
         {
             case MotionEvent.ACTION_MOVE:
                 if (canDrag())
-                    mTouchHelper.setNeedIntercept(true);
+                    mInterceptTouchEvent = true;
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
-                mTouchHelper.setNeedIntercept(false);
-                mTouchHelper.setNeedCosume(false);
+                mInterceptTouchEvent = false;
+                mProcessTouchEvent = false;
                 break;
         }
-        return mTouchHelper.isNeedIntercept();
+        return mInterceptTouchEvent;
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event)
     {
+        mTouchHelper.processTouchEvent(event);
+
         if (ignoreTouchEvent())
             return false;
 
-        mTouchHelper.processTouchEvent(event);
         switch (event.getAction())
         {
             case MotionEvent.ACTION_DOWN:
                 return true;
             case MotionEvent.ACTION_MOVE:
-                if (mTouchHelper.isNeedCosume())
+                if (mProcessTouchEvent)
                 {
-                    int dx = (int) mTouchHelper.getDeltaXFrom(FTouchHelper.EVENT_LAST);
-                    int dy = (int) mTouchHelper.getDeltaYFrom(FTouchHelper.EVENT_LAST);
-
                     final int maxX = getResources().getDisplayMetrics().widthPixels - getWidth();
                     final int maxY = getResources().getDisplayMetrics().heightPixels - getHeight();
 
-                    dx = mTouchHelper.getLegalDeltaX(getWindowParams().x, 0, maxX, dx);
-                    dy = mTouchHelper.getLegalDeltaY(getWindowParams().y, 0, maxY, dy);
+                    final int dx = FTouchHelper.getLegalDelta(getWindowParams().x, 0, maxX, (int) mTouchHelper.getDeltaX());
+                    final int dy = FTouchHelper.getLegalDelta(getWindowParams().y, 0, maxY, (int) mTouchHelper.getDeltaY());
 
                     if (dx != 0 || dy != 0)
                     {
@@ -321,20 +321,20 @@ public class FFloatView extends FrameLayout
                     }
                 } else
                 {
-                    if (canDrag() || mTouchHelper.isNeedIntercept())
+                    if (mInterceptTouchEvent || canDrag())
                     {
-                        mTouchHelper.setNeedCosume(true);
+                        mProcessTouchEvent = true;
                     }
                 }
                 break;
 
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
-                mTouchHelper.setNeedIntercept(false);
-                mTouchHelper.setNeedCosume(false);
+                mInterceptTouchEvent = false;
+                mProcessTouchEvent = false;
                 break;
         }
-        return mTouchHelper.isNeedCosume();
+        return mProcessTouchEvent;
     }
 
     //----------drag logic end----------

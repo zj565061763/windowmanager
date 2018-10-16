@@ -31,9 +31,7 @@ public class FWindowManager
             synchronized (FWindowManager.class)
             {
                 if (sInstance == null)
-                {
                     sInstance = new FWindowManager();
-                }
             }
         }
         return sInstance;
@@ -47,43 +45,36 @@ public class FWindowManager
     public void init(Context context)
     {
         if (mContext == null)
-        {
             mContext = context.getApplicationContext();
-        }
     }
 
     private void initContextIfNeed(View view)
     {
         if (view == null)
-        {
             return;
-        }
-        Context context = view.getContext();
+
+        final Context context = view.getContext();
         if (context == null)
-        {
             return;
-        }
+
         init(context);
     }
 
     private void checkContext()
     {
         if (mContext == null)
-        {
             throw new NullPointerException("mContext is null, you must call init(Context) before this");
-        }
     }
 
     private WindowManager getWindowManager()
     {
         checkContext();
-        WindowManager windowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
-        return windowManager;
+        return (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
     }
 
     public static WindowManager.LayoutParams newLayoutParams()
     {
-        WindowManager.LayoutParams params = new WindowManager.LayoutParams();
+        final WindowManager.LayoutParams params = new WindowManager.LayoutParams();
 
         params.width = WindowManager.LayoutParams.WRAP_CONTENT;
         params.height = WindowManager.LayoutParams.WRAP_CONTENT;
@@ -116,15 +107,13 @@ public class FWindowManager
     public void addView(View view, ViewGroup.LayoutParams params)
     {
         initContextIfNeed(view);
+
         if (containsView(view))
-        {
             return;
-        }
 
         if (params == null)
-        {
             params = newLayoutParams();
-        }
+
         getWindowManager().addView(view, params);
 
         view.removeOnAttachStateChangeListener(mInternalOnAttachStateChangeListener);
@@ -132,7 +121,7 @@ public class FWindowManager
         mMapView.put(view, 0);
     }
 
-    private View.OnAttachStateChangeListener mInternalOnAttachStateChangeListener = new View.OnAttachStateChangeListener()
+    private final View.OnAttachStateChangeListener mInternalOnAttachStateChangeListener = new View.OnAttachStateChangeListener()
     {
         @Override
         public void onViewAttachedToWindow(View v)
@@ -156,15 +145,12 @@ public class FWindowManager
     public void updateViewLayout(View view, ViewGroup.LayoutParams params)
     {
         initContextIfNeed(view);
+
         if (params == null)
-        {
             return;
-        }
 
         if (containsView(view))
-        {
             getWindowManager().updateViewLayout(view, params);
-        }
     }
 
     /**
@@ -177,24 +163,7 @@ public class FWindowManager
         initContextIfNeed(view);
 
         if (containsView(view))
-        {
             getWindowManager().removeView(view);
-        }
-    }
-
-    /**
-     * 立即移除view
-     *
-     * @param view
-     */
-    public void removeViewImmediate(View view)
-    {
-        initContextIfNeed(view);
-
-        if (containsView(view))
-        {
-            getWindowManager().removeViewImmediate(view);
-        }
     }
 
     /**
@@ -213,9 +182,9 @@ public class FWindowManager
      *
      * @param clazz
      */
-    public void removeView(Class clazz)
+    public <T extends View> void removeView(Class<T> clazz)
     {
-        final List<View> list = getView(clazz);
+        final List<T> list = getView(clazz);
         for (View item : list)
         {
             getWindowManager().removeView(item);
@@ -235,9 +204,7 @@ public class FWindowManager
         {
             final View view = item.getKey();
             if (view.getClass() == clazz)
-            {
                 list.add((T) view);
-            }
         }
         return list;
     }
@@ -248,15 +215,13 @@ public class FWindowManager
      * @param clazz
      * @return
      */
-    public boolean containsView(Class clazz)
+    public <T extends View> boolean containsView(Class<T> clazz)
     {
         for (Map.Entry<View, Integer> item : mMapView.entrySet())
         {
             final View view = item.getKey();
             if (view.getClass() == clazz)
-            {
                 return true;
-            }
         }
         return false;
     }

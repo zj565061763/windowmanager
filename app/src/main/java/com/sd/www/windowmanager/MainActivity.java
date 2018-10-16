@@ -12,13 +12,19 @@ import com.sd.lib.windowmanager.FFloatView;
 public class MainActivity extends AppCompatActivity
 {
     private FFloatView mFloatView;
-    private FFloatView mNewActivityFloatView;
+    private FFloatView mActivityFloatView;
+
+    private View mFloatContentView;
+    private View mActivityFloatContentView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mFloatContentView = findViewById(R.id.scrollView);
+        mActivityFloatContentView = findViewById(R.id.btn_new_activity_float);
+
         findViewById(R.id.btn_click).setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -27,27 +33,45 @@ public class MainActivity extends AppCompatActivity
                 Toast.makeText(getApplication(), "click", Toast.LENGTH_SHORT).show();
             }
         });
-
-        mFloatView = new FFloatView(this);
-        mFloatView.setContentView(findViewById(R.id.scrollView)); //设置要悬浮的view
-
-        mNewActivityFloatView = new FFloatView(this);
-        mNewActivityFloatView.setContentView(findViewById(R.id.btn_new_activity_float)); //设置要悬浮的view
     }
 
+    private FFloatView getFloatView()
+    {
+        if (mFloatView == null)
+            mFloatView = new FFloatView(this);
+        return mFloatView;
+    }
+
+    private FFloatView getActivityFloatView()
+    {
+        if (mActivityFloatView == null)
+            mActivityFloatView = new FFloatView(this);
+        return mActivityFloatView;
+    }
+
+    /**
+     * 添加到Window
+     */
     public void onClickAddToWindow(View view)
     {
-        mFloatView.addToWindow(true); //true-添加到Window
+        getFloatView().setContentView(mFloatContentView);
+        getFloatView().addToWindow(true);
     }
 
+    /**
+     * 从Window移除
+     */
     public void onClickRemoveFromWindow(View view)
     {
-        mFloatView.addToWindow(false); //false-从Window移除
+        getFloatView().addToWindow(false);
     }
 
+    /**
+     * 还原到原xml布局
+     */
     public void onClickRestore(View view)
     {
-        mFloatView.restoreContentView(); //还原到原xml布局
+        getFloatView().restoreContentView();
     }
 
     public void onClickNewActivity(View view)
@@ -59,21 +83,18 @@ public class MainActivity extends AppCompatActivity
     protected void onResume()
     {
         super.onResume();
-        mNewActivityFloatView.restoreContentView(); //新界面回来的时候还原
+
+        // 新界面回来的时候还原
+        getActivityFloatView().restoreContentView();
     }
 
     @Override
     protected void onStop()
     {
         super.onStop();
-        mNewActivityFloatView.addToWindow(true); //打开新界面的或时候悬浮
-    }
 
-    @Override
-    protected void onDestroy()
-    {
-        super.onDestroy();
-        mFloatView.setContentView(null);
-        mNewActivityFloatView.setContentView(null);
+        // 打开新界面的时候悬浮
+        getActivityFloatView().setContentView(mActivityFloatContentView);
+        getActivityFloatView().addToWindow(true);
     }
 }

@@ -28,7 +28,7 @@ public class FFloatView extends FrameLayout
      *
      * @return
      */
-    public View getContentView()
+    public final View getContentView()
     {
         return mContentView;
     }
@@ -38,7 +38,7 @@ public class FFloatView extends FrameLayout
      *
      * @param layoutId 内容view布局id
      */
-    public void setContentView(int layoutId)
+    public final void setContentView(int layoutId)
     {
         final View view = LayoutInflater.from(getContext()).inflate(layoutId, this, false);
         setContentView(view);
@@ -49,27 +49,21 @@ public class FFloatView extends FrameLayout
      *
      * @param view
      */
-    public void setContentView(View view)
+    public final void setContentView(View view)
     {
-        if (mContentView == view)
-        {
-            return;
-        }
+        final View old = getContentView();
 
-        if (mContentView != null)
+        if (old == view)
+            return;
+
+        if (old != null)
         {
-            if (mContentView.getParent() == this)
-            {
-                removeView(mContentView);
-                mContentView.setLayoutParams(mViewStoreHelper.getParams());
-            }
+            if (old.getParent() == this)
+                removeView(old);
         }
 
         mContentView = view;
-        if (mContentView != null)
-        {
-            onInitContentView(mContentView);
-        }
+        onContentViewChanged(view);
 
         mViewStoreHelper.save(view);
         synchronizeContentViewSizeToFloatView();
@@ -78,9 +72,9 @@ public class FFloatView extends FrameLayout
     /**
      * {@link #setContentView(View)}和{@link #setContentView(int)}之后会触发此方法，可用来初始化内容view
      *
-     * @param contentView
+     * @param contentView 可能为null
      */
-    protected void onInitContentView(View contentView)
+    protected void onContentViewChanged(View contentView)
     {
 
     }
@@ -88,7 +82,7 @@ public class FFloatView extends FrameLayout
     /**
      * 还原内容view到原父容器
      */
-    public void restoreContentView()
+    public final void restoreContentView()
     {
         mViewStoreHelper.restore();
     }
@@ -98,7 +92,7 @@ public class FFloatView extends FrameLayout
      *
      * @param viewGroup
      */
-    public void restoreContentViewTo(ViewGroup viewGroup)
+    public final void restoreContentViewTo(ViewGroup viewGroup)
     {
         mViewStoreHelper.restoreTo(viewGroup);
     }
@@ -108,39 +102,36 @@ public class FFloatView extends FrameLayout
      *
      * @return
      */
-    public WindowManager.LayoutParams getWindowParams()
+    public final WindowManager.LayoutParams getWindowParams()
     {
         if (mWindowParams == null)
-        {
             mWindowParams = FWindowManager.newLayoutParams();
-        }
         return mWindowParams;
     }
 
     /**
      * 把内容view的大小同步到悬浮view
      */
-    public void synchronizeContentViewSizeToFloatView()
+    public final void synchronizeContentViewSizeToFloatView()
     {
         final View view = getContentView();
         if (view == null)
-        {
             return;
-        }
+
         final ViewGroup.LayoutParams params = view.getLayoutParams();
         if (params == null)
-        {
             return;
-        }
-        getWindowParams().width = params.width;
-        getWindowParams().height = params.height;
+
+        final WindowManager.LayoutParams windowParams = getWindowParams();
+        windowParams.width = params.width;
+        windowParams.height = params.height;
         updateFloatViewLayout();
     }
 
     /**
      * 更新悬浮view布局
      */
-    public void updateFloatViewLayout()
+    public final void updateFloatViewLayout()
     {
         FWindowManager.getInstance().updateViewLayout(this, getWindowParams());
     }
@@ -150,46 +141,33 @@ public class FFloatView extends FrameLayout
      *
      * @param add
      */
-    public void addToWindow(boolean add)
+    public final void addToWindow(boolean add)
     {
         if (add)
         {
-            addContentViewToFloatView();
+            addContentViewToFloatViewIfNeed();
             FWindowManager.getInstance().addView(this, getWindowParams());
         } else
         {
-            FWindowManager.getInstance().removeViewImmediate(this);
+            FWindowManager.getInstance().removeView(this);
         }
     }
 
     /**
      * 把内容view添加到当前悬浮view
      */
-    private void addContentViewToFloatView()
+    private void addContentViewToFloatViewIfNeed()
     {
         final View view = getContentView();
         if (view == null)
-        {
-            return;
-        }
+            throw new NullPointerException("contentView is null");
+
         if (view.getParent() == this)
-        {
             return;
-        }
 
         ViewStoreHelper.removeViewFromParent(view);
         removeAllViews();
         addView(view);
-    }
-
-    /**
-     * 悬浮view是否已经被添加到window
-     *
-     * @return
-     */
-    public boolean isAddedToWindow()
-    {
-        return FWindowManager.getInstance().containsView(this);
     }
 
     @Override
@@ -197,9 +175,7 @@ public class FFloatView extends FrameLayout
     {
         super.onViewRemoved(child);
         if (getChildCount() <= 0)
-        {
             addToWindow(false);
-        }
     }
 
     //----------drag logic start----------

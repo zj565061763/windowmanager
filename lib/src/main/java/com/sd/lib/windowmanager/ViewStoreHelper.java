@@ -54,18 +54,14 @@ class ViewStoreHelper
     public void restoreTo(ViewGroup viewGroup)
     {
         if (viewGroup == null)
-        {
             return;
-        }
+
         final View view = getView();
         if (view == null)
-        {
             return;
-        }
+
         if (view.getParent() == viewGroup)
-        {
             return;
-        }
 
         removeViewFromParent(view);
         viewGroup.addView(view, mIndex, mParams);
@@ -107,15 +103,18 @@ class ViewStoreHelper
     public static void removeViewFromParent(View view)
     {
         if (view == null)
-        {
             return;
-        }
 
         final ViewParent parent = view.getParent();
-        if (parent != null && parent instanceof ViewGroup)
+        if (parent == null)
+            return;
+
+        try
         {
-            ViewGroup viewGroup = (ViewGroup) parent;
-            viewGroup.removeView(view);
+            ((ViewGroup) parent).removeView(view);
+        } catch (Exception e)
+        {
+            e.printStackTrace();
         }
     }
 }

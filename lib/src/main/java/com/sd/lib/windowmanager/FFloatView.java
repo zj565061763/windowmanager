@@ -174,6 +174,10 @@ public class FFloatView extends FrameLayout
     public void onViewRemoved(View child)
     {
         super.onViewRemoved(child);
+
+        if (mContentView == child)
+            setContentView(null);
+
         if (getChildCount() <= 0)
             addToWindow(false);
     }
@@ -190,7 +194,7 @@ public class FFloatView extends FrameLayout
      *
      * @param draggable
      */
-    public void setDraggable(boolean draggable)
+    public final void setDraggable(boolean draggable)
     {
         mIsDraggable = draggable;
     }
@@ -200,12 +204,12 @@ public class FFloatView extends FrameLayout
      *
      * @return
      */
-    public boolean isDraggable()
+    public final boolean isDraggable()
     {
         return mIsDraggable;
     }
 
-    private FTouchHelper mTouchHelper = new FTouchHelper();
+    private final FTouchHelper mTouchHelper = new FTouchHelper();
 
     private boolean dontProcessTouchEvent()
     {

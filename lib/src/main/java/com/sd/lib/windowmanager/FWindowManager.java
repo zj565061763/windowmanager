@@ -79,21 +79,18 @@ public class FWindowManager
         params.width = WindowManager.LayoutParams.WRAP_CONTENT;
         params.height = WindowManager.LayoutParams.WRAP_CONTENT;
 
-        int sdkInt = Build.VERSION.SDK_INT;
-        if (sdkInt >= Build.VERSION_CODES.KITKAT && sdkInt <= Build.VERSION_CODES.N)
+        if (Build.VERSION.SDK_INT >= 26)
         {
-            params.type = WindowManager.LayoutParams.TYPE_TOAST;
+            params.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
         } else
         {
-            params.type = WindowManager.LayoutParams.TYPE_PHONE;
+            params.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
         }
 
         params.gravity = Gravity.LEFT | Gravity.TOP;
         params.format = PixelFormat.TRANSLUCENT;
-
-        params.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
-                | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-                | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
+        params.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
+                WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
 
         return params;
     }

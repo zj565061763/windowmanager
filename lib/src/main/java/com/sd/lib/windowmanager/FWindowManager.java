@@ -18,7 +18,7 @@ public class FWindowManager
     private static FWindowManager sInstance;
 
     private Context mContext;
-    private Map<View, Integer> mMapView = new WeakHashMap<>();
+    private final Map<View, Integer> mMapView = new WeakHashMap<>();
 
     private FWindowManager()
     {
@@ -88,7 +88,7 @@ public class FWindowManager
         }
 
         params.gravity = Gravity.LEFT | Gravity.TOP;
-        params.format = PixelFormat.TRANSLUCENT;
+        params.format = PixelFormat.RGBA_8888;
         params.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
                 WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
 
